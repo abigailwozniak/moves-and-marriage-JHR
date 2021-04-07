@@ -1,0 +1,461 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  XXX/jhr_output/jhr_figs_3
+> a_3b.txt
+  log type:  text
+ opened on:   8 Feb 2021, 18:47:32
+
+.         global outsheet XXX/jhr_outp
+> ut
+
+. 
+. use $datadir/figs_3a_3b
+
+. 
+.         drop t_neg* t_pos*
+
+. 
+.         *** marriages surrounding re-enlistment for five-year sample - conditional on re-enlist
+.         
+. 
+.                 bys id first_term: egen maxfirst = max(filedt_s)
+(7,501 missing values generated)
+
+.                 replace maxfirst = . if first_term == 0         
+(1,108,396 real changes made, 1,108,396 to missing)
+
+.                 gen not_first_term = first_term ~= 1
+
+.                 bys id: egen re_enlist2 = max(not_first_term)
+
+.                         forvalues x=1/24 {
+  2.                         gen t_neg`x' = 0 if m_ent == 0 & re_enlist2 == 1
+  3.                         }
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+(1,370,070 missing values generated)
+
+.                         forvalues x=1/24 {
+  2.                         local y = `x' -1
+  3.                         local z = `y' * 30
+  4.                         replace t_neg`x' = 1 if date_marr - maxfirst  < -`z' & re_enlist2 == 1
+  5.                         }
+(835,935 real changes made)
+(833,632 real changes made)
+(818,796 real changes made)
+(801,329 real changes made)
+(785,998 real changes made)
+(769,824 real changes made)
+(751,953 real changes made)
+(734,965 real changes made)
+(718,537 real changes made)
+(701,359 real changes made)
+(684,355 real changes made)
+(667,020 real changes made)
+(648,625 real changes made)
+(633,956 real changes made)
+(616,495 real changes made)
+(595,935 real changes made)
+(577,203 real changes made)
+(553,589 real changes made)
+(532,625 real changes made)
+(512,792 real changes made)
+(491,144 real changes made)
+(467,329 real changes made)
+(445,416 real changes made)
+(422,111 real changes made)
+
+.                         
+.                         forvalues x=0/25 {
+  2.                         gen t_pos`x' = 0 if re_enlist2 == 1
+  3.                         }
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+
+.                         
+.                         forvalues x=1/26 {
+  2.                         local y = `x' - 1
+  3.                         local z = `y' * 30
+  4.                         replace t_pos`y' = 1 if  date_marr - maxfirst  < `z' & re_enlist2 == 1
+  5.                         }
+(835,935 real changes made)
+(854,123 real changes made)
+(882,337 real changes made)
+(887,040 real changes made)
+(904,285 real changes made)
+(920,149 real changes made)
+(937,554 real changes made)
+(956,467 real changes made)
+(976,786 real changes made)
+(996,405 real changes made)
+(1,015,677 real changes made)
+(1,037,143 real changes made)
+(1,054,527 real changes made)
+(1,072,366 real changes made)
+(1,093,574 real changes made)
+(1,112,626 real changes made)
+(1,131,587 real changes made)
+(1,147,621 real changes made)
+(1,164,410 real changes made)
+(1,180,318 real changes made)
+(1,196,228 real changes made)
+(1,210,193 real changes made)
+(1,223,166 real changes made)
+(1,236,958 real changes made)
+(1,249,216 real changes made)
+(1,260,076 real changes made)
+
+.                 
+.                 *** one obs per person
+.                 bys id first_term: gen num_temp = _n
+
+.                 replace num_temp = . if first_term == 0
+(1,108,396 real changes made, 1,108,396 to missing)
+
+.                 
+.                 
+.                 
+.                 summ t_neg* t_pos* if figure_sample == 1 & everabroad == 0 & num_temp == 1 & re_e
+> nlist2 == 1 & maxfirst - firstdate > 365
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      t_neg1 |        556    .2985612     .458039          0          1
+      t_neg2 |        556    .2985612     .458039          0          1
+      t_neg3 |        556    .2913669    .4548013          0          1
+      t_neg4 |        556    .2841727    .4514256          0          1
+      t_neg5 |        556    .2679856    .4433089          0          1
+-------------+---------------------------------------------------------
+      t_neg6 |        556    .2589928    .4384761          0          1
+      t_neg7 |        556    .2410072    .4280798          0          1
+      t_neg8 |        556    .2284173    .4201909          0          1
+      t_neg9 |        556    .2230216    .4166475          0          1
+     t_neg10 |        556    .2086331    .4066974          0          1
+-------------+---------------------------------------------------------
+     t_neg11 |        556    .1906475    .3931654          0          1
+     t_neg12 |        556    .1726619     .378295          0          1
+     t_neg13 |        556    .1582734    .3653258          0          1
+     t_neg14 |        556    .1456835    .3531063          0          1
+     t_neg15 |        556    .1366906    .3438298          0          1
+-------------+---------------------------------------------------------
+     t_neg16 |        556    .1294964    .3360509          0          1
+     t_neg17 |        556     .118705    .3237324          0          1
+     t_neg18 |        556    .1097122    .3128122          0          1
+     t_neg19 |        556    .0953237     .293926          0          1
+     t_neg20 |        556    .0773381    .2673678          0          1
+-------------+---------------------------------------------------------
+     t_neg21 |        556    .0683453    .2525648          0          1
+     t_neg22 |        556    .0557554    .2296554          0          1
+     t_neg23 |        556    .0467626    .2113201          0          1
+     t_neg24 |        556    .0377698    .1908107          0          1
+      t_pos0 |        556    .2985612     .458039          0          1
+-------------+---------------------------------------------------------
+      t_pos1 |        556    .3021583     .459607          0          1
+      t_pos2 |        556    .3255396     .468998          0          1
+      t_pos3 |        556    .3291367    .4703228          0          1
+      t_pos4 |        556    .3417266    .4747155          0          1
+      t_pos5 |        556    .3489209    .4770581          0          1
+-------------+---------------------------------------------------------
+      t_pos6 |        556    .3615108    .4808707          0          1
+      t_pos7 |        556    .3651079     .481894          0          1
+      t_pos8 |        556    .3758993    .4847904          0          1
+      t_pos9 |        556    .3938849    .4890498          0          1
+     t_pos10 |        556    .3992806    .4901916          0          1
+-------------+---------------------------------------------------------
+     t_pos11 |        556    .4118705    .4926151          0          1
+     t_pos12 |        556    .4208633    .4941422          0          1
+     t_pos13 |        556    .4244604    .4947059          0          1
+     t_pos14 |        556    .4352518    .4962364          0          1
+     t_pos15 |        556    .4460432    .4975278          0          1
+-------------+---------------------------------------------------------
+     t_pos16 |        556    .4532374    .4982567          0          1
+     t_pos17 |        556    .4640288    .4991535          0          1
+     t_pos18 |        556    .4730216    .4997212          0          1
+     t_pos19 |        556    .4820144    .5001264          0          1
+     t_pos20 |        556    .4928058    .5003984          0          1
+-------------+---------------------------------------------------------
+     t_pos21 |        556    .5017986     .500447          0          1
+     t_pos22 |        556    .5053957    .5004211          0          1
+     t_pos23 |        556    .5125899    .5002916          0          1
+     t_pos24 |        556    .5215827    .4999838          0          1
+     t_pos25 |        556     .528777    .4996207          0          1
+
+.                 
+.                 ** Figure 3A
+.                 tabstat t_neg13 t_neg12 t_neg11 t_neg10 t_neg9 t_neg8 t_neg7 t_neg6 t_neg5 t_neg4
+>  t_neg3 t_neg2 t_neg1 t_pos1 t_pos2 t_pos3 t_pos4 t_pos5 t_pos6 t_pos7 t_pos8 t_pos9 t_pos10 t_po
+> s11 t_pos12 t_pos13 t_pos14 t_pos15 t_pos16 t_pos17 t_pos18 t_pos19 t_pos20 t_pos21 t_pos22 t_pos
+> 23 t_pos24 t_pos25 if figure_sample == 1 & everabroad == 0 & num_temp == 1 & re_enlist2 == 1 & ma
+> xfirst - firstdate > 365, stats(mean n) col(s)
+
+    variable |      mean         N
+-------------+--------------------
+     t_neg13 |  .1582734       556
+     t_neg12 |  .1726619       556
+     t_neg11 |  .1906475       556
+     t_neg10 |  .2086331       556
+      t_neg9 |  .2230216       556
+      t_neg8 |  .2284173       556
+      t_neg7 |  .2410072       556
+      t_neg6 |  .2589928       556
+      t_neg5 |  .2679856       556
+      t_neg4 |  .2841727       556
+      t_neg3 |  .2913669       556
+      t_neg2 |  .2985612       556
+      t_neg1 |  .2985612       556
+      t_pos1 |  .3021583       556
+      t_pos2 |  .3255396       556
+      t_pos3 |  .3291367       556
+      t_pos4 |  .3417266       556
+      t_pos5 |  .3489209       556
+      t_pos6 |  .3615108       556
+      t_pos7 |  .3651079       556
+      t_pos8 |  .3758993       556
+      t_pos9 |  .3938849       556
+     t_pos10 |  .3992806       556
+     t_pos11 |  .4118705       556
+     t_pos12 |  .4208633       556
+     t_pos13 |  .4244604       556
+     t_pos14 |  .4352518       556
+     t_pos15 |  .4460432       556
+     t_pos16 |  .4532374       556
+     t_pos17 |  .4640288       556
+     t_pos18 |  .4730216       556
+     t_pos19 |  .4820144       556
+     t_pos20 |  .4928058       556
+     t_pos21 |  .5017986       556
+     t_pos22 |  .5053957       556
+     t_pos23 |  .5125899       556
+     t_pos24 |  .5215827       556
+     t_pos25 |   .528777       556
+----------------------------------
+
+.         
+.                 drop t_neg* t_pos* num_temp
+
+.         
+.                 *** first move surrounding re-enlistment for five-year sample
+.         
+.                 bys id move_not: egen temp_minmove = min(filedt_s)
+(7,501 missing values generated)
+
+.                 replace temp_minmove = . if move_not == 0
+(3,485,607 real changes made, 3,485,607 to missing)
+
+.                 bys id: egen minmove = min(temp_minmove)
+(803,906 missing values generated)
+
+.                         forvalues x=1/13 {
+  2.                         gen t_neg`x' = 0 if re_enlist2 == 1
+  3.                         }
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+
+.                         forvalues x=1/13 {
+  2.                         local y = `x' -1
+  3.                         local z = `y' * 30
+  4.                         replace t_neg`x' = 1 if minmove - maxfirst  < -`z'  & re_enlist2 == 1 
+> & minmove ~= .
+  5.                         }
+(680,378 real changes made)
+(675,082 real changes made)
+(648,607 real changes made)
+(620,875 real changes made)
+(597,743 real changes made)
+(572,297 real changes made)
+(541,190 real changes made)
+(508,748 real changes made)
+(477,084 real changes made)
+(448,225 real changes made)
+(419,780 real changes made)
+(392,662 real changes made)
+(359,726 real changes made)
+
+.                         
+.                         forvalues x=0/13 {
+  2.                         gen t_pos`x' = 0  if re_enlist2 == 1
+  3.                         }
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+(752,290 missing values generated)
+
+.                         
+.                         forvalues x=1/13 {
+  2.                         local y = `x' - 1
+  3.                         local z = `y' * 30 
+  4.                         replace t_pos`y' = 1 if minmove - maxfirst  < `z' & re_enlist2 == 1 & 
+> minmove ~= .
+  5.                         }
+(680,378 real changes made)
+(821,737 real changes made)
+(826,118 real changes made)
+(828,515 real changes made)
+(835,829 real changes made)
+(847,104 real changes made)
+(866,413 real changes made)
+(891,516 real changes made)
+(920,972 real changes made)
+(953,119 real changes made)
+(984,326 real changes made)
+(1,024,751 real changes made)
+(1,063,254 real changes made)
+
+.                 
+.                 *** one obs per person
+.                 bys id first_term: gen num_temp = _n
+
+.                 replace num_temp = . if first_term == 0
+(1,108,396 real changes made, 1,108,396 to missing)
+
+.                 *** make sure in army for one years before and one years after re-enlistment
+.                 gen re_sample = re_enlist2 == 1 & maxfirst - firstdate > 365 & lastdate - maxfirs
+> t > 365
+
+.                 
+.                 summ t_neg* t_pos* if everabroad == 0 & num_temp == 1 & re_sample == 1 & ever_fig
+> ure_sample == 1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      t_neg1 |      6,102    .4955752    .5000214          0          1
+      t_neg2 |      6,102    .4954113    .5000199          0          1
+      t_neg3 |      6,102     .486234    .4998514          0          1
+      t_neg4 |      6,102    .4765651    .4994914          0          1
+      t_neg5 |      6,102    .4659128    .4988776          0          1
+-------------+---------------------------------------------------------
+      t_neg6 |      6,102    .4498525    .4975196          0          1
+      t_neg7 |      6,102    .4275647    .4947659          0          1
+      t_neg8 |      6,102    .4077352    .4914537          0          1
+      t_neg9 |      6,102    .3923304    .4883097          0          1
+     t_neg10 |      6,102    .3757784    .4843629          0          1
+-------------+---------------------------------------------------------
+     t_neg11 |      6,102    .3582432    .4795234          0          1
+     t_neg12 |      6,102    .3413635     .474206          0          1
+     t_neg13 |      6,102    .3153065    .4646759          0          1
+      t_pos0 |      6,102    .4955752    .5000214          0          1
+      t_pos1 |      6,102    .5390036    .4985172          0          1
+-------------+---------------------------------------------------------
+      t_pos2 |      6,102    .5404785    .4983996          0          1
+      t_pos3 |      6,102    .5421173    .4982638          0          1
+      t_pos4 |      6,102    .5488364    .4976501          0          1
+      t_pos5 |      6,102    .5578499    .4966828          0          1
+      t_pos6 |      6,102    .5830875    .4930885          0          1
+-------------+---------------------------------------------------------
+      t_pos7 |      6,102    .6214356     .485069          0          1
+      t_pos8 |      6,102    .6601114    .4737099          0          1
+      t_pos9 |      6,102    .7033759    .4568068          0          1
+     t_pos10 |      6,102    .7436906    .4366304          0          1
+     t_pos11 |      6,102    .8082596    .3937022          0          1
+-------------+---------------------------------------------------------
+     t_pos12 |      6,102    .8733202    .3326412          0          1
+     t_pos13 |      6,102           0           0          0          0
+
+. 
+.                 *** Figure 3B
+.                 tabstat t_neg13 t_neg12 t_neg11 t_neg10 t_neg9 t_neg8 t_neg7 t_neg6 t_neg5 t_neg4
+>  t_neg3 t_neg2 t_neg1 t_pos1 t_pos2 t_pos3 t_pos4 t_pos5 t_pos6 t_pos7 t_pos8 t_pos9 t_pos10 t_po
+> s11 t_pos12 if everabroad == 0 & num_temp == 1 & re_sample == 1 & ever_figure_sample == 1, stats(
+> mean n) col(s)
+
+    variable |      mean         N
+-------------+--------------------
+     t_neg13 |  .3153065      6102
+     t_neg12 |  .3413635      6102
+     t_neg11 |  .3582432      6102
+     t_neg10 |  .3757784      6102
+      t_neg9 |  .3923304      6102
+      t_neg8 |  .4077352      6102
+      t_neg7 |  .4275647      6102
+      t_neg6 |  .4498525      6102
+      t_neg5 |  .4659128      6102
+      t_neg4 |  .4765651      6102
+      t_neg3 |   .486234      6102
+      t_neg2 |  .4954113      6102
+      t_neg1 |  .4955752      6102
+      t_pos1 |  .5390036      6102
+      t_pos2 |  .5404785      6102
+      t_pos3 |  .5421173      6102
+      t_pos4 |  .5488364      6102
+      t_pos5 |  .5578499      6102
+      t_pos6 |  .5830875      6102
+      t_pos7 |  .6214356      6102
+      t_pos8 |  .6601114      6102
+      t_pos9 |  .7033759      6102
+     t_pos10 |  .7436906      6102
+     t_pos11 |  .8082596      6102
+     t_pos12 |  .8733202      6102
+----------------------------------
+
+. 
+.         
+.                 
+.         
+. 
+end of do-file

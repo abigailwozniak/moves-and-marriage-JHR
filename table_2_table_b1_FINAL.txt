@@ -1,0 +1,234 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  XXX/jhr_output/table_2_ta
+> ble_b1.txt
+  log type:  text
+ opened on:  17 Mar 2021, 20:49:20
+
+.         global outsheet XXX/jhr_outp
+> ut
+
+. 
+. 
+. use $datadir/jhr_samples_created
+
+. 
+. 
+. 
+. **** taking out combat
+.                 local demos_everdissolve female ged hsd asc_smc college_pl afqsc black hispanic o
+> ther_race sum_combat age age_sq
+
+.                 local demos_everkids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 local demos_nbr_kids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 local demos_age_marr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat
+
+.                 local demos_evermarr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 local demos_marr_nm_ent female ged hsd asc_smc college_pl afqsc black hispanic ot
+> her_race sum_combat age age_sq
+
+.                 local demos_married female ged hsd asc_smc college_pl afqsc black hispanic other_
+> race sum_combat age age_sq
+
+.                 local demos_re_enlist female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race sum_combat age age_sq
+
+. 
+.                 
+. **** taking out combat
+.                 local demos_everdissolve2 female ged hsd asc_smc college_pl afqsc black hispanic 
+> other_race  age age_sq
+
+.                 local demos_everkids2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_nbr_kids2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_age_marr2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_evermarr2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_married2 female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race  age age_sq
+
+.                 local demos_marr_nm_ent2 female ged hsd asc_smc college_pl afqsc black hispanic o
+> ther_race  age age_sq          
+
+.                 local demos_re_enlist2 female ged hsd asc_smc college_pl afqsc black hispanic oth
+> er_race  age age_sq
+
+.                 
+. ***********************************************************************
+. **** TABLE 2 **********************************************************
+. **** Summary Statistics ***********************************************
+. ***********************************************************************
+.         
+.         gen pre2002 = mind < td(01oct2001) if initial_year ~= .
+(7,501 missing values generated)
+
+.         gen post2001 = mind >= td(01oct2001) if initial_year ~= .
+(7,501 missing values generated)
+
+.                 
+.         
+. *** replacing re-enlist to 10 equal to missing if could not have been in for 10 years.
+.         replace re_enlist_10 = . if initial_year > 2003
+(119,942 real changes made, 119,942 to missing)
+
+.         gen everkids_nokids = everkids if kids_ent == 0
+(55,239 missing values generated)
+
+.         gen evermarr_nm_ent = evermarr if nm_ent == 1
+(81,061 missing values generated)
+
+.         gen age_marr_table = age_marr if evermarr == 1 & nm_ent == 1
+(225,613 missing values generated)
+
+.         
+.         
+.         /* order of summary stats: female age black hispanic other_race afqsc ged hsd hsg asc_smc
+>  college_pl everdepl sum_combat first_term re_enlist_10 dualspouse everdual totmoves_not evermarr
+>  everkids_nokids everdissolve */
+.         
+.                 foreach var in female black hispanic other_race ged hsd hsg asc_smc college_pl ev
+> erdepl first_term re_enlist_10 dualspouse everdual evermarr_nm_ent marr_nm_ent married everkids_n
+> okids everdissolve {
+  2.         foreach group in all male pre2002 term6 female {            
+  3.                 qui summ `var' if sample_re_enlist_us == 1 & `group' == 1, de
+  4.                 
+.                 scalar mean`var'`group' = round(r(mean), .01)
+  5.                 scalar sd`var'`group' = round(r(sd), .01)
+  6.                 
+.                 }
+  7.         mat mat`var' = [mean`var'all, mean`var'male, mean`var'pre2002, mean`var'term6]
+  8.         mat mat2`var' = [mean`var'all, mean`var'male, mean`var'female]
+  9.                 }
+
+.         
+.                 foreach var in age afqsc sum_combat totmoves_not maxyos age_marr_table {
+  2.         foreach group in all male pre2002 term6 female {            
+  3.                 qui summ `var' if sample_re_enlist_us == 1 & `group' == 1, de
+  4.                 
+.                 scalar mean`var'`group' = round(r(mean), .01)
+  5.                 scalar sd`var'`group' = round(r(sd), .01)
+  6.                 
+.                 }
+  7.         mat mat`var' = [mean`var'all, mean`var'male, mean`var'pre2002, mean`var'term6\sd`var'a
+> ll, sd`var'male, sd`var'pre2002, sd`var'term6]
+  8.         mat mat2`var' = [mean`var'all, mean`var'male, mean`var'female\sd`var'all, sd`var'male,
+>  sd`var'female]
+  9. 
+.                 }
+
+. 
+.                 foreach group in all male pre2002 term6 female {
+  2.         qui summ female if sample_re_enlist_us == 1 & `group' == 1
+  3.         scalar n`group' = r(N)
+  4.                 }
+
+.                 
+.         mat table_2 = [matfemale\matage\matblack\mathispanic\matother_race\matafqsc\matged\mathsd
+> \mathsg\matasc_smc\matcollege_pl\mateverdepl\matsum_combat\matfirst_term\matre_enlist_10\matmaxyo
+> s\matdualspouse\mateverdual\mattotmoves_not\matevermarr_nm_ent\matmarr_nm_ent\matmarried\matage_m
+> arr_table\mateverkids_nokids\mateverdissolve\nall, nmale, npre2002, nterm6]
+
+.         
+.         
+.         ***********************************************************************
+. **** TABLE B1 *********************************************************
+. **** Summary Stats for All, Men, and Women ****************************
+. ***********************************************************************
+.  
+.         mat table_b1 = [mat2female\mat2age\mat2black\mat2hispanic\mat2other_race\mat2afqsc\mat2ge
+> d\mat2hsd\mat2hsg\mat2asc_smc\mat2college_pl\mat2everdepl\mat2sum_combat\mat2first_term\mat2re_en
+> list_10\mat2maxyos\mat2dualspouse\mat2everdual\mat2totmoves_not\mat2evermarr_nm_ent\mat2marr_nm_e
+> nt\mat2married\mat2age_marr_table\mat2everkids_nokids\mat2everdissolve\nall, nmale, nfemale]
+
+. 
+.         matrix list table_2
+
+table_2[32,4]
+         c1      c2      c3      c4
+ r1     .13       0     .15     .14
+ r1   26.03   26.01    25.7      26
+ r2    3.76    3.72    3.43    3.86
+ r1      .2     .17     .24     .15
+ r1     .12     .12      .1      .1
+ r1     .06     .06     .06     .06
+ r1   59.65    60.1   59.75   68.01
+ r2   19.08   19.18   18.47   16.76
+ r1      .1     .11     .06     .07
+ r1     .01     .01     .01     .01
+ r1     .76     .76     .81     .76
+ r1     .09     .09     .08     .12
+ r1     .03     .03     .03     .04
+ r1     .69     .72      .4     .68
+ r1    10.3   10.78    3.83   10.05
+ r2    8.81    8.81    5.76    8.52
+ r1     .19     .19     .19     .79
+ r1     .44     .46     .45     .33
+ r1     8.4    8.45   10.06    7.51
+ r2    3.72    3.75    4.73    3.27
+ r1     .07     .04     .07     .07
+ r1      .1     .06     .12     .11
+ r1     .58     .58     .67     .41
+ r2     .62     .62     .63     .56
+ r1     .55     .55     .52      .5
+ r1     .53     .53      .5     .48
+ r1     .61     .62     .59     .57
+ r1   23.13   23.21   22.88   23.14
+ r2    3.09    3.07    2.84    3.22
+ r1     .37     .37     .32     .32
+ r1     .09     .07     .07     .09
+r32  182694  158592   80774   22267
+
+.         
+.         matrix list table_b1
+
+table_b1[32,3]
+         c1      c2      c3
+ r1     .13       0       1
+ r1   26.03   26.01   26.15
+ r2    3.76    3.72    4.07
+ r1      .2     .17     .38
+ r1     .12     .12     .13
+ r1     .06     .06     .08
+ r1   59.65    60.1    56.7
+ r2   19.08   19.18   18.11
+ r1      .1     .11     .05
+ r1     .01     .01       0
+ r1     .76     .76     .75
+ r1     .09     .09     .15
+ r1     .03     .03     .05
+ r1     .69     .72     .53
+ r1    10.3   10.78    7.14
+ r2    8.81    8.81    8.16
+ r1     .19     .19     .21
+ r1     .44     .46     .36
+ r1     8.4    8.45    8.05
+ r2    3.72    3.75    3.49
+ r1     .07     .04     .26
+ r1      .1     .06     .38
+ r1     .58     .58     .62
+ r2     .62     .62     .62
+ r1     .55     .55     .59
+ r1     .53     .53     .52
+ r1     .61     .62     .57
+ r1   23.13   23.21   22.64
+ r2    3.09    3.07    3.14
+ r1     .37     .37     .34
+ r1     .09     .07     .22
+r32  182694  158592   24102
+
+. 
+end of do-file

@@ -1,0 +1,538 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  XXX/jhr_output/samples_fo
+> r_t2_7.txt
+  log type:  text
+ opened on:  22 Mar 2021, 11:52:42
+
+.         global figdir XXX/figs_miles
+
+.         global outsheet XXX/jhr_outp
+> ut
+
+.                 
+. use $datadir/jhr_clean_for_tables       
+
+. 
+.                 
+. ***********************************************************************
+. ***** creating different samples to run for each set of outcomes
+. ***********************************************************************
+.         *** just for us moves
+.                 qui areg everdissolve totmoves_not ged hsd hsg asc_smc college_pl female afqsc bl
+> ack hispanic other_race sum_combat age if evermarr == 1 & everabroad == 0, absorb(exper_br_year_f
+> e)
+
+.                 gen sample_everdissolve_us = e(sample)
+
+.                 dis "summ everdissolve by nbr moves, us only"
+summ everdissolve by nbr moves, us only
+
+.                 tabstat everdissolve if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: everdissolve
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .0857012     52368
+           1 |  .0877876     57753
+           2 |  .0918491      7447
+           3 |   .079646       452
+           4 |  .1041667        48
+           5 |         0         4
+-------------+--------------------
+       Total |  .0870909    118072
+----------------------------------
+
+.                 local demos_everdissolve female ged hsd asc_smc college_pl afqsc black hispanic o
+> ther_race sum_combat age age_sq
+
+.                 
+.                 qui areg everkids totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat everdual age if everabroad == 0 & kids_ent == 0, absorb(exper_br_y
+> ear_fe)
+
+.                 gen sample_everkids_us = e(sample)
+
+.                 dis "summ everkids by nbr moves, us only"
+summ everkids by nbr moves, us only
+
+.                 tabstat everkids if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: everkids
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .3386514     76970
+           1 |  .3927152     71217
+           2 |  .4289171      8680
+           3 |  .4274662       517
+           4 |  .4915254        59
+           5 |        .5         4
+-------------+--------------------
+       Total |  .3684351    157447
+----------------------------------
+
+.                 local demos_everkids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+. 
+.                 qui areg nbr_kids totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat everdual age if everabroad == 0 & kids_ent == 0, absorb(exper_br_y
+> ear_fe)
+
+.                 gen sample_nbr_kids_us = e(sample)
+
+.                 dis "summ everkids by nbr moves, us only"
+summ everkids by nbr moves, us only
+
+.                 tabstat nbr_kids if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: nbr_kids
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .7280523     76967
+           1 |  .7804333     71213
+           2 |   .834447      8680
+           3 |  .7698259       517
+           4 |  .7627119        59
+           5 |        .5         4
+-------------+--------------------
+       Total |  .7577553    157440
+----------------------------------
+
+.                 local demos_nbr_kids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 
+.                 
+.                 qui areg age_marr totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age if evermarr == 1 & nm_ent == 1 & everabroad == 0, absorb(exper
+> _br_year_fe)
+
+.                 gen sample_age_marr_us = e(sample)
+
+.                 dis "summ age_marr by nbr moves, us only"
+summ age_marr by nbr moves, us only
+
+.                 tabstat age_marr if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: age_marr
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  23.18504     35477
+           1 |  23.09293     39025
+           2 |  23.02812      5083
+           3 |  22.88945       319
+           4 |  23.19026        37
+           5 |  20.98654         3
+-------------+--------------------
+       Total |  23.12884     79944
+----------------------------------
+
+.                 local demos_age_marr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat
+
+. 
+.                 qui areg evermarr totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age age_sq if nm_ent == 1 & everabroad == 0, absorb(exper_br_year_
+> fe)
+
+.                 gen sample_evermarr_us = e(sample)
+
+.                 gen sample_marr_nm_ent_us = e(sample)
+
+.                 dis "summ evermarr by nbr moves, us only"
+summ evermarr by nbr moves, us only
+
+.                 tabstat evermarr if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: evermarr
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .4986717     71143
+           1 |  .6028826     64734
+           2 |  .6481765      7842
+           3 |  .6659708       479
+           4 |  .6981132        53
+           5 |         1         3
+-------------+--------------------
+       Total |   .554203    144254
+----------------------------------
+
+.                 local demos_evermarr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 
+.                 gen marr_nm_ent = married if nm_ent == 1 
+(81,041 missing values generated)
+
+.                 local demos_marr_nm_ent female ged hsd asc_smc college_pl afqsc black hispanic ot
+> her_race sum_combat age age_sq
+
+.                 
+.                 **** saving this sample to use for the T7 regressions with five obs per person
+.                 preserve
+
+.                 keep if sample_evermarr_us == 1 
+(241,617 observations deleted)
+
+.                 save $datadir/evermarr_us_sample, replace
+file XXX/dta/evermarr_us_sample.dta sa
+> ved
+
+.                 restore
+
+.                 
+.                 
+.                 qui areg married totmoves_not ged hsd hsg asc_smc college_pl female afqsc black h
+> ispanic other_race sum_combat age age_sq if everabroad == 0, absorb(exper_br_year_fe)
+
+.                 gen sample_married_us = e(sample)
+
+.                 dis "summ married by nbr moves, us only"
+summ married by nbr moves, us only
+
+.                 tabstat married if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: married
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .5608835     88193
+           1 |  .6537035     83596
+           2 |   .688802     10225
+           3 |  .7042484       612
+           4 |     .6875        64
+           5 |         1         4
+-------------+--------------------
+       Total |  .6110491    182694
+----------------------------------
+
+.                 local demos_married female ged hsd asc_smc college_pl afqsc black hispanic other_
+> race sum_combat age age_sq
+
+.                 
+.                 qui areg re_enlist totmoves_not ged hsd hsg asc_smc college_pl female afqsc black
+>  hispanic other_race sum_combat age age_sq if everabroad == 0, absorb(exper_br_year_fe)          
+>       
+
+.                 gen sample_re_enlist_us = e(sample)
+
+.                 dis "summ re_enlist by nbr moves, us only"
+summ re_enlist by nbr moves, us only
+
+.                 tabstat re_enlist if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)     
+>        
+
+Summary for variables: re_enlist_10
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .2408468     88193
+           1 |  .2865687     83596
+           2 |  .3006357     10225
+           3 |   .372549       612
+           4 |   .296875        64
+           5 |       .75         4
+-------------+--------------------
+       Total |  .2655862    182694
+----------------------------------
+
+.                 local demos_re_enlist female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race sum_combat age age_sq
+
+.                 
+.         *** including abroad moves
+.         
+.                 qui areg everdissolve totmoves_not ged hsd hsg asc_smc college_pl female afqsc bl
+> ack hispanic other_race sum_combat age if evermarr == 1 & ever_abroad_notGM_GE_IT == 0, absorb(ex
+> per_br_year_fe)
+
+.                 gen sample_everdissolve_all = e(sample)
+
+.                 dis "summ everdissolve by nbr moves, abroad included"
+summ everdissolve by nbr moves, abroad included
+
+.                 tabstat everdissolve if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: everdissolve
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .0838082     95993
+           1 |  .0879475     99639
+           2 |   .091252     19616
+           3 |  .0831643       986
+           4 |     .0875        80
+           5 |         0         6
+-------------+--------------------
+       Total |  .0863859    216320
+----------------------------------
+
+.                 
+.                 qui areg everkids totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat  age if kids_ent == 0 & ever_abroad_notGM_GE_IT == 0, absorb(exper
+> _br_year_fe)
+
+.                 gen sample_everkids_all = e(sample)
+
+.                 dis "summ everkids by nbr moves, abroad included"
+summ everkids by nbr moves, abroad included
+
+.                 tabstat everkids if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: everkids
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .3206887    140903
+           1 |  .3439846    136509
+           2 |    .36735     26291
+           3 |  .4060995      1246
+           4 |  .4313725       102
+           5 |        .5         6
+-------------+--------------------
+       Total |  .3355242    305057
+----------------------------------
+
+. 
+.                 qui areg nbr_kids totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat  age if kids_ent == 0 & ever_abroad_notGM_GE_IT == 0, absorb(exper
+> _br_year_fe)
+
+.                 gen sample_nbr_kids_all = e(sample)
+
+.                 dis "summ nbr_kids by nbr moves, abroad included"
+summ nbr_kids by nbr moves, abroad included
+
+.                 tabstat nbr_kids if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: nbr_kids
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .6639152    140896
+           1 |  .6812085    136503
+           2 |  .7108406     26290
+           3 |  .7335474      1246
+           4 |  .6666667       102
+           5 |        .5         6
+-------------+--------------------
+       Total |  .6759801    305043
+----------------------------------
+
+.                 
+.                 qui areg age_marr totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age if evermarr == 1 & nm_ent == 1 & ever_abroad_notGM_GE_IT == 0,
+>  absorb(exper_br_year_fe)
+
+.                 gen sample_age_marr_all = e(sample)
+
+.                 dis "summ age_marr by nbr moves, abroad included"
+summ age_marr by nbr moves, abroad included
+
+.                 tabstat age_marr if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: age_marr
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  23.22403     64882
+           1 |  23.14422     68781
+           2 |  23.13266     14327
+           3 |  22.98033       730
+           4 |  23.70005        61
+           5 |  20.58179         4
+-------------+--------------------
+       Total |  23.17727    148785
+----------------------------------
+
+. 
+.                 qui areg evermarr totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age if nm_ent == 1 & ever_abroad_notGM_GE_IT == 0, absorb(exper_br
+> _year_fe)
+
+.                 gen sample_evermarr_all = e(sample)
+
+.                 dis "summ evermarr by nbr moves, abroad included"
+summ evermarr by nbr moves, abroad included
+
+.                 tabstat evermarr if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: evermarr
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .4994227    129916
+           1 |   .547612    125609
+           2 |  .5876538     24380
+           3 |  .6287683      1161
+           4 |   .655914        93
+           5 |         1         4
+-------------+--------------------
+       Total |  .5291948    281163
+----------------------------------
+
+. 
+.                 qui areg marr_nm_ent totmoves_not ged hsd hsg asc_smc college_pl female afqsc bla
+> ck hispanic other_race sum_combat age age_sq if nm_ent == 1 & ever_abroad_notGM_GE_IT == 0, absor
+> b(exper_br_year_fe)
+
+.                 gen sample_marr_nm_ent_all = e(sample)
+
+.                 dis "summ married if not married when enter by nbr moves, abroad included"
+summ married if not married when enter by nbr moves, abroad included
+
+.                 tabstat marr_nm_ent if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: marr_nm_ent
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .4761399    129924
+           1 |  .5209247    125617
+           2 |  .5596161     24381
+           3 |  .6020672      1161
+           4 |  .6344086        93
+           5 |         1         4
+-------------+--------------------
+       Total |  .5039654    281180
+----------------------------------
+
+.                                         
+.                 qui areg married totmoves_not ged hsd hsg asc_smc college_pl female afqsc black h
+> ispanic other_race sum_combat age if ever_abroad_notGM_GE_IT == 0, absorb(exper_br_year_fe)
+
+.                 gen sample_married_all = e(sample)
+
+.                 dis "summ married by nbr moves, abroad included"
+summ married by nbr moves, abroad included
+
+.                 tabstat married if e(sample) == 1, by(totmoves_not)             c(stats) stats(me
+> an n)
+
+Summary for variables: married
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .5633417    161355
+           1 |  .6004374    156829
+           2 |  .6234443     29730
+           3 |  .6617336      1419
+           4 |  .6785714       112
+           5 |         1         6
+-------------+--------------------
+       Total |   .585547    349451
+----------------------------------
+
+.                 
+.                 qui areg re_enlist totmoves_not ged hsd hsg asc_smc college_pl female afqsc black
+>  hispanic other_race sum_combat age if ever_abroad_notGM_GE_IT == 0, absorb(exper_br_year_fe)    
+>       
+
+.                 gen sample_re_enlist_all = e(sample)
+
+.                 dis "summ re_enlist by nbr moves, abroad included"
+summ re_enlist by nbr moves, abroad included
+
+.                 tabstat re_enlist if e(sample) == 1, by(totmoves_not)   c(stats) stats(mean n)  
+
+Summary for variables: re_enlist_10
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .2985591    161355
+           1 |  .3143296    156829
+           2 |  .3392533     29730
+           3 |  .3706836      1419
+           4 |  .3482143       112
+           5 |        .5         6
+-------------+--------------------
+       Total |   .309411    349451
+----------------------------------
+
+.                 
+. 
+.         gen two_move_if_one = 1 if two_move == 1
+(355,288 missing values generated)
+
+.         replace two_move_if_one = 0 if one_move == 1
+(166,080 real changes made)
+
+. 
+.         gen time_since_move_2 = time_since_move if two_move == 1
+(376,470 missing values generated)
+
+.         
+. 
+. 
+. *** How many moves do people have?
+. foreach var in everdissolve everkids age_marr evermarr married re_enlist{
+  2.         dis "`var'"
+  3.         *tab totmoves_not if sample_`var'_us == 1
+. 
+.         *tab totmoves_not_w_abroad if sample_`var'_all == 1
+. }
+everdissolve
+everkids
+age_marr
+evermarr
+married
+re_enlist
+
+. 
+. *** who has kids but is never married
+. 
+.         summ everkids if evermarr == 0
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    everkids |    144,536    .0737256    .2613247          0          1
+
+.         
+.         count if everkids == 1 & evermarr == 0
+  10,656
+
+.         count
+  385,871
+
+. 
+. *** stationed in home division interacted with total divisions
+. gen hom_div_tot = ever_hom_div * totmoves_not
+
+. 
+. save $datadir/jhr_samples_created, replace
+file XXX/dta/jhr_samples_created.dta s
+> aved
+
+. 
+. 
+. ***********************************************************************
+. ***** RUNNING ALL OF THE REGRESSIONS BASED ON THE SAMPLES CREATED ABOVE
+. ***********************************************************************
+. 
+. 
+. 
+.                 
+. 
+end of do-file
+

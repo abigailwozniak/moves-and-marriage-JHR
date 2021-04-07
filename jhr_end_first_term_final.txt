@@ -1,0 +1,1428 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  XXX/jhr_output/jhr_end_fi
+> rst_term.txt
+  log type:  text
+ opened on:  22 Mar 2021, 11:57:50
+
+.         global outsheet XXX/jhr_outp
+> ut
+
+. 
+. 
+. if `first_term' {
+.         use $datadir/jhr_sample_table6, clear
+.         local yos maxtime
+.         local group first_term
+. }
+
+. 
+. 
+. ** dropping variables we don't need
+. 
+.         drop latitude longitude geoloc arloc_old region_sp division_sp locna geona tlac lng_nm ug
+> rid point educ_gr curr_time_ 
+
+. 
+. compress
+  variable filedt_s was float now int
+  variable sum_combat was float now byte
+  variable min_combat_filedt_s was float now int
+  variable year was float now int
+  variable pna_end_dt was float now int
+  variable next_move_10 was int now byte
+  variable next_move_12 was int now byte
+  variable next_move_20 was int now byte
+  variable msa was float now int
+  variable state_fips was float now byte
+  variable re was float now byte
+  variable edgrp4 was float now byte
+  variable metaread_old was float now int
+  variable female was float now byte
+  variable metaread was float now int
+  variable statefip was float now byte
+  variable age_marr was float now int
+  variable date_first_kids was float now int
+  variable date_first_notmarr was float now int
+  variable spells_startdate was float now int
+  variable spells_re_enlist was float now byte
+  variable num_ssn3 was float now byte
+  variable onetermonly was float now byte
+  variable re_enlist was float now byte
+  variable maxfirst was float now int
+  variable maxtime was float now byte
+  variable new_terms was float now byte
+  variable full_term was float now byte
+  variable evermarr was float now byte
+  variable everdissolve was float now byte
+  variable everkids was float now byte
+  variable maxpaygr was float now byte
+  variable prom_early was float now byte
+  variable spouse_id was float now int
+  variable state was str5 now str2
+  variable msa_new was str6 now str4
+  (305,910,704 bytes saved)
+
+. 
+. drop _merge
+
+. 
+. *** merging in the county data on ammenities
+. gen county_fips = countyfips
+(378,355 missing values generated)
+
+. destring county_fips, replace
+county_fips: all characters numeric; replaced as long
+(378355 missing values generated)
+
+. merge m:1 county_fips using $datadir/county_natamen.dta
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       875,303
+        from master                   872,712  (_merge==1)
+        from using                      2,591  (_merge==2)
+
+    matched                         2,603,546  (_merge==3)
+    -----------------------------------------
+
+. 
+. ren _merge merge_ammen
+
+. 
+. drop metaread
+
+. ren metaread_old metaread
+
+. 
+. replace metaread = 8840 if state == "DC"
+(2,162 real changes made)
+
+. 
+. merge m:1 metaread year using $datadir/median_2br_rent_allyrs
+(note: variable year was int, now float to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     1,651,800
+        from master                 1,646,633  (_merge==1)
+        from using                      5,167  (_merge==2)
+
+    matched                         1,832,216  (_merge==3)
+    -----------------------------------------
+
+. ren _merge merge_2br
+
+. 
+. drop statefip
+
+. 
+.         gen statefip = .
+(3,484,016 missing values generated)
+
+. 
+.         replace statefip = 1 if state == "AL"
+(41,381 real changes made)
+
+.         replace statefip = 2 if state == "AK"
+(49,576 real changes made)
+
+.         replace statefip = 4 if state == "AZ"
+(33,216 real changes made)
+
+.         replace statefip = 5 if state == "AR"
+(468 real changes made)
+
+.         replace statefip = 6 if state == "CA"
+(44,407 real changes made)
+
+.         replace statefip = 8 if state == "CO"
+(88,160 real changes made)
+
+.         replace statefip = 9 if state == "CT"
+(61 real changes made)
+
+.         replace statefip = 10 if state == "DE"
+(4 real changes made)
+
+.         replace statefip = 12 if state == "FL"
+(6,151 real changes made)
+
+.         replace statefip = 13 if state == "GA"
+(430,157 real changes made)
+
+.         replace statefip = 15 if state == "HI"
+(92,936 real changes made)
+
+.         replace statefip = 16 if state == "ID"
+(13 real changes made)
+
+.         replace statefip = 17 if state == "IL"
+(601 real changes made)
+
+.         replace statefip = 18 if state == "IN"
+(4,184 real changes made)
+
+.         replace statefip = 19 if state == "IA"
+(73 real changes made)
+
+.         replace statefip = 20 if state == "KS"
+(77,074 real changes made)
+
+.         replace statefip = 21 if state == "KY"
+(251,026 real changes made)
+
+.         replace statefip = 22 if state == "LA"
+(58,775 real changes made)
+
+.         replace statefip = 23 if state == "ME"
+(151 real changes made)
+
+.         replace statefip = 24 if state == "MD"
+(48,565 real changes made)
+
+.         replace statefip = 25 if state == "MA"
+(2,735 real changes made)
+
+.         replace statefip = 26 if state == "MI"
+(287 real changes made)
+
+.         replace statefip = 27 if state == "MN"
+(116 real changes made)
+
+.         replace statefip = 28 if state == "MS"
+(276 real changes made)
+
+.         replace statefip = 29 if state == "MO"
+(130,969 real changes made)
+
+.         replace statefip = 30 if state == "MT"
+(11 real changes made)
+
+.         replace statefip = 31 if state == "NE"
+(17 real changes made)
+
+.         replace statefip = 32 if state == "NV"
+(30 real changes made)
+
+.         replace statefip = 33 if state == "NH"
+(12 real changes made)
+
+.         replace statefip = 34 if state == "NJ"
+(6,534 real changes made)
+
+.         replace statefip = 35 if state == "NM"
+(1,676 real changes made)
+
+.         replace statefip = 36 if state == "NY"
+(89,898 real changes made)
+
+.         replace statefip = 37 if state == "NC"
+(245,220 real changes made)
+
+.         replace statefip = 38 if state == "ND"
+(8 real changes made)
+
+.         replace statefip = 39 if state == "OH"
+(250 real changes made)
+
+.         replace statefip = 40 if state == "OK"
+(131,507 real changes made)
+
+.         replace statefip = 41 if state == "OR"
+(114 real changes made)
+
+.         replace statefip = 42 if state == "PA"
+(1,097 real changes made)
+
+.         replace statefip = 44 if state == "RI"
+(29 real changes made)
+
+.         replace statefip = 45 if state == "SC"
+(197,710 real changes made)
+
+.         replace statefip = 46 if state == "SD"
+(50 real changes made)
+
+.         replace statefip = 47 if state == "TN"
+(149 real changes made)
+
+.         replace statefip = 48 if state == "TX"
+(400,954 real changes made)
+
+.         replace statefip = 49 if state == "UT"
+(431 real changes made)
+
+.         replace statefip = 50 if state == "VT"
+(8 real changes made)
+
+.         replace statefip = 51 if state == "VA"
+(147,093 real changes made)
+
+.         replace statefip = 53 if state == "WA"
+(117,502 real changes made)
+
+.         replace statefip = 54 if state == "WV"
+(41 real changes made)
+
+.         replace statefip = 55 if state == "WI"
+(292 real changes made)
+
+.         replace statefip = 56 if state == "WY"
+(9 real changes made)
+
+. 
+. *ren state_fip statefip
+.         merge m:1 statefip year using $datadir/median_2br_rent_state_allyrs_2
+(label statefip_lbl already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       782,925
+        from master                   782,605  (_merge==1)
+        from using                        320  (_merge==2)
+
+    matched                         2,701,411  (_merge==3)
+    -----------------------------------------
+
+.         ren _merge merge_2br_state
+
+. 
+.         replace md_rrentgrsi = md_rrentgrsi_state if md_rrentgrsi == . & merge_2br_state == 3
+(882,513 real changes made)
+
+. 
+. *** merge in share employment data using msa
+.         drop shcon shman shgov shmil 
+
+.         
+.         merge m:1 msa year using $datadir/BEA_msa, keepusing(shcon shman shgov shmil shsvc)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     1,414,098
+        from master                 1,401,017  (_merge==1)
+        from using                     13,081  (_merge==2)
+
+    matched                         2,083,319  (_merge==3)
+    -----------------------------------------
+
+.         foreach var in shcon shman shgov shmil shsvc {
+  2.         ren `var' `var'msa
+  3.         }
+
+.         tab _merge
+
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+        master only (1) |  1,401,017       40.06       40.06
+         using only (2) |     13,081        0.37       40.43
+            matched (3) |  2,083,319       59.57      100.00
+------------------------+-----------------------------------
+                  Total |  3,497,417      100.00
+
+.         drop if _merge == 2
+(13,081 observations deleted)
+
+.         ren _merge merge_msa2
+
+.         sort state_fips year
+
+.         merge m:1 state_fips year using $datadir/BEA_state, keepusing(shcon shman shgov shmil shs
+> vc)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       790,712
+        from master                   789,499  (_merge==1)
+        from using                      1,213  (_merge==2)
+
+    matched                         2,694,837  (_merge==3)
+    -----------------------------------------
+
+.         tab _merge
+
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+        master only (1) |    789,499       22.65       22.65
+         using only (2) |      1,213        0.03       22.69
+            matched (3) |  2,694,837       77.31      100.00
+------------------------+-----------------------------------
+                  Total |  3,485,549      100.00
+
+. 
+.         foreach var in shcon shman shgov shmil shsvc {
+  2.         ren `var' `var'state
+  3.         }
+
+.         drop if _merge == 2
+(1,213 observations deleted)
+
+.         ren _merge merge_state_year2
+
+.         
+.         foreach var in shcon shman shgov shmil shsvc {
+  2.         gen `var' = `var'msa if merge_msa2 == 3
+  3.         replace `var' = `var'state if merge_state_year2 == 3 & (merge_msa2 ~= 3 | msa == . | `
+> var'msa == .)
+  4.         }
+(1,401,036 missing values generated)
+(628,663 real changes made)
+(1,401,057 missing values generated)
+(628,547 real changes made)
+(1,401,017 missing values generated)
+(628,672 real changes made)
+(1,401,017 missing values generated)
+(628,672 real changes made)
+(1,401,017 missing values generated)
+(628,672 real changes made)
+
+. 
+. *** creating the first arloc for someone - for clustering
+.         sort id training filedt_s
+
+.         bys id training: gen first = _n
+
+.         replace first = 0 if first ~= 1
+(2,580,757 real changes made)
+
+. 
+.         egen arlocnum = group(arloc)
+(8,078 missing values generated)
+
+.         gen tempx = arlocnum if first == 1 & training == 0
+(3,029,008 missing values generated)
+
+.         bys id: egen first_arlocnum = max(tempx) 
+(24,493 missing values generated)
+
+.         drop tempx
+
+. 
+. **** first_term variable
+.         sort id filedt_s
+
+.         by id: gen numterm = _n
+
+.         gen tempterm6 = real(terms) if numterm == 1
+(3,023,020 missing values generated)
+
+.         
+.         bys id: egen term_first = max(tempterm6)
+(23,932 missing values generated)
+
+.         
+.         drop tempterm6
+
+. 
+.         gen tempterm6 = terms == "6" & numterm == 1
+
+.         
+.         bys id: egen term6 = max(tempterm6)
+
+. 
+. forvalues x=3/4 {
+  2.         gen tempterm`x' = terms == "`x'" & numterm == 1
+  3.         
+.         bys id: egen term`x' = max(tempterm`x')
+  4.         }
+
+. forvalues x=5/5 {
+  2.         gen tempterm`x' = terms == "`x'" & numterm == 1
+  3.         
+.         bys id: egen terms`x' = max(tempterm`x')
+  4.         }
+
+. 
+.         
+. *** creating variable for initial rank
+.         bys id: egen mind = min(filedt_s)
+(8,078 missing values generated)
+
+.         gen temprank = real(substr(grade, 3, 1))
+(8,078 missing values generated)
+
+.         gen initial_rank_temp = temprank if filedt_s == mind
+(3,020,250 missing values generated)
+
+.         bys id: egen initial_rank = max(initial_rank_temp)
+(8,078 missing values generated)
+
+. 
+.         
+. *** creating variable for initial year
+.         gen initial_year = year(mind)
+(8,078 missing values generated)
+
+.         
+. *** are people in divisions and bcts?
+.         gen bct = div == 1 | bdereg == 1
+
+. 
+. *** married when enter  
+.         gen temp3 = married == 1 & firstobs == 1
+
+.         bys id: egen m_ent = max(temp3)
+
+.         drop temp3
+
+.         
+. *** kids when enter
+.         gen temp3 = kids == 1 & firstobs == 1
+
+.         bys id: egen kids_ent = max(temp3)
+
+.         drop temp3
+
+.         
+. *** married with less than a year in the Army
+. 
+.         gen less_yr = (filedt_s - startdate <= 365) & filedt_s > startdate
+
+.         gen temp5 = less_yr == 1 & marst == "M" & m_ent == 0
+
+.         bys id: egen mar_lyr = max(temp5)
+
+.         drop temp5
+
+. 
+. *** age when enter
+.         gen temp3 = age if firstobs == 1
+(3,042,639 missing values generated)
+
+.         bys id: egen age_when_enter = max(temp3)
+(164,209 missing values generated)
+
+.         drop temp3
+
+. 
+.         ren _merge merge_old1
+
+. 
+. ** figuring out age when first get married - merging in data from age_marr.do.  also creates vari
+> able for first time not married and first time with kids.
+. 
+.         /*age_marr is a filedt_s*/
+.         gen tempage = age_marr - birthmo
+(1,203,547 missing values generated)
+
+.         gen date_marr = age_marr
+(1,201,156 missing values generated)
+
+.         gen tempage2 = tempage/365.25
+(1,203,547 missing values generated)
+
+.         replace tempage2 = . if tempage2 < 17 | tempage2 > 55
+(403 real changes made, 403 to missing)
+
+.         drop age_marr tempage
+
+.         ren tempage2 age_marr
+
+.         
+. *** people who were ever abroad
+.         bys id: egen everabroad = max(abroad)
+(8,078 missing values generated)
+
+.                 
+.         *** first move
+.         gen date_move = filedt_s if move_not == 1
+(3,169,958 missing values generated)
+
+.         bys id: egen min_date_move = min(date_move)
+(1,281,895 missing values generated)
+
+.                 
+. *** dual spouse
+.         gen dualspouse = spouse_id ~= .
+
+.         replace married = 1 if dualspouse == 1
+(3,126 real changes made)
+
+.         dis "summarizing dualspouse"
+summarizing dualspouse
+
+.         summ dualspouse
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  dualspouse |  3,484,336     .026172    .1596466          0          1
+
+.         
+. *** deployment variables
+.         gen temp = sum_combat >0 & sum_combat ~= .  
+
+.         bys id: egen everdepl = max(temp)
+
+. 
+. *** date of first non-training move
+. 
+.         bys id move_not: egen temp_move = min(filedt_s)
+(8,078 missing values generated)
+
+.         replace temp_move = . if move_not == 0
+(3,161,880 real changes made, 3,161,880 to missing)
+
+.         bys id: egen first_move_dt_s = min(temp_move)
+(1,281,895 missing values generated)
+
+. 
+. *** creating year, job, rank interaction variables
+.         bys initial_rank pmos initial_year: gen exper_br_year_flag=1 if _n==1
+(3,469,940 missing values generated)
+
+.         replace exper_br_year_flag=0 if exper_br_year_flag==.
+(3,469,940 real changes made)
+
+.         gen exper_br_year_fe=sum(exper_br_year_flag)
+
+.         drop exper_br_year_flag
+
+.         
+. *** creating year, job, rank, gender interaction variables
+.         bys initial_rank pmos initial_year sex: gen exper_br_year_flag_s=1 if _n==1
+(3,461,887 missing values generated)
+
+.         replace exper_br_year_flag_s=0 if exper_br_year_flag_s==.
+(3,461,887 real changes made)
+
+.         gen exper_br_year_sex_fe=sum(exper_br_year_flag_s)
+
+.         drop exper_br_year_flag_s
+
+. 
+. *** for first timers, the CRA assumptions include term length
+.         if `first_term' {
+.         drop exper_br_year_fe
+.         bys initial_rank pmos initial_year term_first: gen exper_br_year_flag=1 if _n==1
+(3,449,466 missing values generated)
+.         replace exper_br_year_flag=0 if exper_br_year_flag==.
+(3,449,466 real changes made)
+.         gen exper_br_year_fe=sum(exper_br_year_flag)
+.         drop exper_br_year_flag
+.         }
+
+.         
+. *****************************************************
+. ** Creating a number of right hand side variables
+. *****************************************************
+. 
+. ** move_yr - did you move in a particular year? 
+.         bys id: egen totmoves  = total(move)
+
+. *** non-training moves
+.         bys id: egen totmoves_not = total(move_not)
+
+.         replace move_not = 0 if last_not == 1 & distance_move_not == 0
+(118,112 real changes made)
+
+.         replace distance_move_not = 0 if move_not ~= 1
+(1,431,216 real changes made)
+
+.         bys id: egen tot_dist_not = total(distance_move_not)
+
+.         replace tot_dist_not = . if everabroad == 1
+(1,630,900 real changes made, 1,630,900 to missing)
+
+. 
+. 
+. *** changing the totmoves to only include non-abroad moves --- just for Germany and Italy where i
+> t is most likely to be accomanied.  
+. 
+.         gen abroad_move = 0 if move_not == 1 & conus == 1
+(3,358,216 missing values generated)
+
+.         sort id move_not
+
+.         replace abroad_move = 1 if move_not == 1 & conus == 0 & (substr(arloc, 1, 2) == "GE" | su
+> bstr(arloc, 1, 2) == "GM" | substr(arloc, 1, 2) == "IT") & conus[_n-1] == 1 & id == id[_n-1]
+(15,815 real changes made)
+
+.         replace abroad_move = 1 if move_not == 1 & conus == 1 & (substr(arloc[_n-1], 1, 2) == "GE
+> " | substr(arloc[_n-1], 1, 2) == "GM" | substr(arloc[_n-1], 1, 2) == "IT") & id == id[_n-1]
+(18,171 real changes made)
+
+.         
+.         gen abroad_move_c_o = 0 if move_not == 1
+(3,288,070 missing values generated)
+
+.         replace abroad_move_c_o = 1 if move_not == 1 & conus == 0 & (substr(arloc, 1, 2) == "GE" 
+> | substr(arloc, 1, 2) == "GM" | substr(arloc, 1, 2) == "IT") & conus[_n-1] == 1 & id == id[_n-1]
+(15,815 real changes made)
+
+.         
+.         gen abroad_move_o_c = 0 if move_not == 1
+(3,288,070 missing values generated)
+
+.         replace abroad_move_o_c = 1 if move_not == 1 & conus == 1 & (substr(arloc[_n-1], 1, 2) ==
+>  "GE" | substr(arloc[_n-1], 1, 2) == "GM" | substr(arloc[_n-1], 1, 2) == "IT") & id == id[_n-1]
+(18,171 real changes made)
+
+.         
+.         gen abroad_to_abroad_move = 0 if move_not == 1
+(3,288,070 missing values generated)
+
+.         replace abroad_to_abroad_move = 1 if move_not == 1 & (substr(arloc, 1, 2) == "GE" | subst
+> r(arloc, 1, 2) == "GM" | substr(arloc, 1, 2) == "IT")  & (substr(arloc[_n-1], 1, 2) == "GE" | sub
+> str(arloc[_n-1], 1, 2) == "GM" | substr(arloc[_n-1], 1, 2) == "IT") & id == id[_n-1]
+(13,713 real changes made)
+
+.         
+.         gen move_not_us = move_not
+(8,078 missing values generated)
+
+.         replace move_not_us = 0 if abroad_move == 1 | (conus == 0 & move_not == 1)      
+(88,317 real changes made)
+
+.         bys id: egen totmoves_not_us = total(move_not_us)       
+
+.         ren totmoves_not totmoves_not_w_abroad
+
+.         bys id: egen abroad_moves_not = total(abroad_move)
+
+.         gen totmoves_not = totmoves_not_us
+
+.         
+.         ** could be domestic moves within us or within italy/germany
+.         label var totmoves_not "Domestic Moves"
+
+. 
+. ** total time spent in training
+.         sort id filedt_s
+
+.         gen time_in_training = filedt_s - filedt_s[_n-1] if training == 1 & id == id[_n-1] & file
+> dt_s > filedt_s[_n-1]
+(2,612,785 missing values generated)
+
+.         bys id: egen min_train = min(filedt_s)
+(8,078 missing values generated)
+
+.         gen mintrain = (filedt_s == min_train & training == 1)
+
+.         replace time_in_training = filedt_s - startdate if mintrain == 1
+(435,760 real changes made)
+
+.         bys id: egen tot_time_t = total(time_in_training)
+
+.         drop min_train mintrain
+
+. 
+. bys id: egen lastdate = max(filedt_s)
+(8,078 missing values generated)
+
+. 
+.         /* creating a file to check some of the data */
+.         egen newid = group(id)
+(8,078 missing values generated)
+
+.         sort newid filedt_s
+
+. 
+. *** number of kids
+.         gen nbr_kids = nrdep - 1 if married == 1 & dualspouse ~= 1
+(2,658,979 missing values generated)
+
+.         replace nbr_kids = nrdep if married == 0 | dualspouse == 1      
+(2,636,211 real changes made)
+
+.         replace nbr_kids = nrdep if married == 0 & dualspouse == .
+(0 real changes made)
+
+.         
+.         bys id: egen temp_kids = max(nbr_kids)
+(8,557 missing values generated)
+
+.         drop nbr_kids
+
+.         ren temp_kids nbr_kids
+
+. 
+. ******
+. ** keeping one observation
+. ******
+.         bys id: egen max = max(filedt_s)
+(8,078 missing values generated)
+
+.         keep if filedt_s == max
+(3,012,172 observations deleted)
+
+. 
+. 
+. ** some people are missing their marriage indicator for the last observation.  replacing with dee
+> rs data in that case
+.         replace married = 1 if married == . & spouse_deers == 1
+(211 real changes made)
+
+.         replace married = 0 if married == . & spouse_deers == 0
+(432 real changes made)
+
+.         
+. *** moves per year variables
+.         gen tot_mov_nt_yr = totmoves_not / `yos'
+(24,893 missing values generated)
+
+.         gen tot_moves_yr = totmoves / `yos'
+(24,893 missing values generated)
+
+. 
+.         set emptycells drop, permanently
+(set emptycells preference recorded)
+
+. 
+.         gen male = sex == "M" if sex ~= ""
+(8,079 missing values generated)
+
+. 
+. *** creating some sub populations
+.         gen all = 1
+
+.         gen nm_ent = 1 if m_ent == 0
+(77,726 missing values generated)
+
+.         replace nm_ent = 0 if m_ent == 1
+(77,726 real changes made)
+
+. 
+.         gen term5 = terms == "5"
+
+.         
+.         gen max_three = totmoves_not_w_abroad <= 3
+
+.         
+.         gen neverdepl = everdepl == 0
+
+.         gen infantry = branch == "IN"
+
+. 
+. ***********************************************************************
+. ***** creating different samples to run for each set of outcomes
+. ***********************************************************************
+.         *** just for us moves
+.                 qui areg everdissolve totmoves_not ged hsd hsg asc_smc college_pl female afqsc bl
+> ack hispanic other_race sum_combat age if evermarr == 1 & everabroad == 0, absorb(exper_br_year_f
+> e)
+
+.                 gen sample_everdissolve_us = e(sample)
+
+.                 dis "summ everdissolve by nbr moves, us only"
+summ everdissolve by nbr moves, us only
+
+.                 tabstat everdissolve if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: everdissolve
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .0446632     93679
+           1 |  .0778406     12911
+           2 |  .0736402      1195
+           3 |  .0306748       163
+           4 |  .0769231        13
+-------------+--------------------
+       Total |  .0489343    107961
+----------------------------------
+
+.                 local demos_everdissolve female ged hsd asc_smc college_pl afqsc black hispanic o
+> ther_race sum_combat age age_sq
+
+.                 
+.                 qui areg everkids totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age if everabroad == 0 & kids_ent == 0, absorb(exper_br_year_fe)
+
+.                 gen sample_everkids_us = e(sample)
+
+.                 dis "summ everkids by nbr moves, us only"
+summ everkids by nbr moves, us only
+
+.                 tabstat everkids if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: everkids
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .1324323    223148
+           1 |  .2302831     22151
+           2 |  .2778384      1832
+           3 |  .2254545       275
+           4 |        .5        18
+-------------+--------------------
+       Total |  .1423993    247424
+----------------------------------
+
+.                 local demos_everkids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+. 
+.                 qui areg nbr_kids totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age if everabroad == 0 & kids_ent == 0, absorb(exper_br_year_fe)
+
+.                 gen sample_nbr_kids_us = e(sample)
+
+.                 dis "summ everkids by nbr moves, us only"
+summ everkids by nbr moves, us only
+
+.                 tabstat nbr_kids if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: nbr_kids
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .2986223    223118
+           1 |  .4406321     22150
+           2 |  .5060044      1832
+           3 |  .4181818       275
+           4 |  .7777778        18
+-------------+--------------------
+       Total |  .3130404    247393
+----------------------------------
+
+.                 local demos_nbr_kids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 
+.                 
+.                 qui areg age_marr totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age if evermarr == 1 & nm_ent == 1 & everabroad == 0, absorb(exper
+> _br_year_fe)
+
+.                 gen sample_age_marr_us = e(sample)
+
+.                 dis "summ age_marr by nbr moves, us only"
+summ age_marr by nbr moves, us only
+
+.                 tabstat age_marr if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: age_marr
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  22.51243     49147
+           1 |  22.76717      8499
+           2 |  23.00297       815
+           3 |   22.9168       116
+           4 |  23.11431        12
+-------------+--------------------
+       Total |  22.55713     58589
+----------------------------------
+
+.                 local demos_age_marr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat
+
+. 
+.                 qui areg evermarr totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age age_sq if nm_ent == 1 & everabroad == 0, absorb(exper_br_year_
+> fe)
+
+.                 gen sample_evermarr_us = e(sample)
+
+.                 gen sample_marr_nm_ent_us = e(sample)
+
+.                 dis "summ evermarr by nbr moves, us only"
+summ evermarr by nbr moves, us only
+
+.                 tabstat evermarr if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: evermarr
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .2368724    207483
+           1 |  .4159123     20437
+           2 |  .4794118      1700
+           3 |   .458498       253
+           4 |  .7058824        17
+-------------+--------------------
+       Total |   .254861    229890
+----------------------------------
+
+.                 local demos_evermarr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 
+.                 gen marr_nm_ent = married if nm_ent == 1 
+(85,804 missing values generated)
+
+.                 local demos_marr_nm_ent female ged hsd asc_smc college_pl afqsc black hispanic ot
+> her_race sum_combat age age_sq
+
+.                 
+. 
+.                 qui areg married totmoves_not ged hsd hsg asc_smc college_pl female afqsc black h
+> ispanic other_race sum_combat age age_sq if everabroad == 0, absorb(exper_br_year_fe)
+
+.                 gen sample_married_us = e(sample)
+
+.                 dis "summ married by nbr moves, us only"
+summ married by nbr moves, us only
+
+.                 tabstat married if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: married
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |   .361318    252055
+           1 |  .4934605     24849
+           2 |  .5466346      2080
+           3 |  .5366667       300
+           4 |  .6111111        18
+-------------+--------------------
+       Total |   .374659    279302
+----------------------------------
+
+.                 local demos_married female ged hsd asc_smc college_pl afqsc black hispanic other_
+> race sum_combat age age_sq
+
+.                 
+.                 qui areg re_enlist totmoves_not ged hsd hsg asc_smc college_pl female afqsc black
+>  hispanic other_race sum_combat age age_sq if everabroad == 0, absorb(exper_br_year_fe)          
+>       
+
+.                 gen sample_re_enlist_us = e(sample)
+
+.                 dis "summ re_enlist by nbr moves, us only"
+summ re_enlist by nbr moves, us only
+
+.                 tabstat re_enlist if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)     
+>        
+
+Summary for variables: re_enlist
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .7276825    252055
+           1 |  .6954807     24849
+           2 |  .6596154      2080
+           3 |  .5533333       300
+           4 |  .6666667        18
+-------------+--------------------
+       Total |  .7241194    279302
+----------------------------------
+
+.                 local demos_re_enlist female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race sum_combat age age_sq
+
+.                 
+. 
+.                 
+. **** taking out combat
+.                 local demos_everdissolve2 female ged hsd asc_smc college_pl afqsc black hispanic 
+> other_race  age age_sq
+
+.                 local demos_everkids2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_nbr_kids2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_age_marr2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_evermarr2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_married2 female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race  age age_sq
+
+.                 local demos_marr_nm_ent2 female ged hsd asc_smc college_pl afqsc black hispanic o
+> ther_race  age age_sq          
+
+.                 local demos_re_enlist2 female ged hsd asc_smc college_pl afqsc black hispanic oth
+> er_race  age age_sq
+
+.                 
+. eststo clear
+
+. ***********************************************************************
+. **** TABLE 2 **********************************************************
+. **** Summary Statistics ***********************************************
+. ***********************************************************************
+.         
+.         gen pre2002 = mind < td(01oct2001) if initial_year ~= .
+(8,078 missing values generated)
+
+.         gen post2001 = mind >= td(01oct2001) if initial_year ~= .
+(8,078 missing values generated)
+
+.         
+.         count if married == .
+  8,078
+
+. 
+. *** How many moves do people have?
+. foreach var in everdissolve everkids age_marr evermarr married re_enlist{
+  2.         dis "`var'"
+  3.         tab totmoves_not if sample_`var'_us == 1
+  4. 
+. *       tab totmoves_not_w_abroad if sample_`var'_all == 1
+. }
+everdissolve
+
+   Domestic |
+      Moves |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     93,679       86.77       86.77
+          1 |     12,911       11.96       98.73
+          2 |      1,195        1.11       99.84
+          3 |        163        0.15       99.99
+          4 |         13        0.01      100.00
+------------+-----------------------------------
+      Total |    107,961      100.00
+everkids
+
+   Domestic |
+      Moves |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    223,148       90.19       90.19
+          1 |     22,151        8.95       99.14
+          2 |      1,832        0.74       99.88
+          3 |        275        0.11       99.99
+          4 |         18        0.01      100.00
+------------+-----------------------------------
+      Total |    247,424      100.00
+age_marr
+
+   Domestic |
+      Moves |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     49,147       83.88       83.88
+          1 |      8,499       14.51       98.39
+          2 |        815        1.39       99.78
+          3 |        116        0.20       99.98
+          4 |         12        0.02      100.00
+------------+-----------------------------------
+      Total |     58,589      100.00
+evermarr
+
+   Domestic |
+      Moves |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    207,483       90.25       90.25
+          1 |     20,437        8.89       99.14
+          2 |      1,700        0.74       99.88
+          3 |        253        0.11       99.99
+          4 |         17        0.01      100.00
+------------+-----------------------------------
+      Total |    229,890      100.00
+married
+
+   Domestic |
+      Moves |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    252,055       90.24       90.24
+          1 |     24,849        8.90       99.14
+          2 |      2,080        0.74       99.89
+          3 |        300        0.11       99.99
+          4 |         18        0.01      100.00
+------------+-----------------------------------
+      Total |    279,302      100.00
+re_enlist
+
+   Domestic |
+      Moves |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    252,055       90.24       90.24
+          1 |     24,849        8.90       99.14
+          2 |      2,080        0.74       99.89
+          3 |        300        0.11       99.99
+          4 |         18        0.01      100.00
+------------+-----------------------------------
+      Total |    279,302      100.00
+
+. 
+. *** who has kids but is never married
+. 
+.         summ everkids if evermarr == 0
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    everkids |    283,396    .0356992    .1855394          0          1
+
+.         
+.         count if everkids == 1 & evermarr == 0
+  10,117
+
+.         count
+  472,164
+
+. 
+. ***********************************************************************
+. ***** RUNNING ALL OF THE REGRESSIONS BASED ON THE SAMPLES CREATED ABOVE
+. ***********************************************************************
+. 
+. 
+. ******
+. *** Table 6 - Column 3
+. ******
+. **** Table 6, Panel A
+. 
+. foreach var in evermarr {
+  2.         foreach var2 in totmoves_not {
+  3.                         foreach cond in all  {
+  4.                         areg `var' `var2' `demos_`var'' if `cond' == 1  & sample_`var'_us == 1
+> , robust absorb(exper_br_year_sex_fe)
+  5.                         qui summ `var' if e(sample) == 1, de
+  6.                         local mean = r(mean)
+  7.                         qui summ `var2' if e(sample) == 1, de
+  8.                         local mean2 = r(mean)
+  9.                         outreg2  using $outsheet/table_6_col3.xls, replace label ctitle("`var'
+> ") dec(3) addtex(Mean, `mean', Indep Mean, `mean2') keep(`var2') 
+ 10.                                 
+.                         }
+ 11. 
+.                         }       
+ 12.         }
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    229,890
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     14,035
+                                                F(  12, 215843)   =     644.62
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1462
+                                                Adj R-squared     =     0.0907
+                                                Root MSE          =     0.4156
+
+------------------------------------------------------------------------------
+             |               Robust
+    evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+totmoves_not |   .1020316   .0031946    31.94   0.000     .0957703     .108293
+      female |          0  (omitted)
+         ged |   .0204956   .0035988     5.70   0.000     .0134421    .0275492
+         hsd |   .0361904   .0115155     3.14   0.002     .0136203    .0587604
+     asc_smc |  -.0101603   .0044415    -2.29   0.022    -.0188656   -.0014551
+  college_pl |  -.0346208   .0088392    -3.92   0.000    -.0519453   -.0172962
+       afqsc |  -.0005722    .000057   -10.04   0.000    -.0006839   -.0004605
+       black |  -.0119269   .0026054    -4.58   0.000    -.0170334   -.0068205
+    hispanic |   .0308882   .0032485     9.51   0.000     .0245212    .0372552
+  other_race |   -.027812   .0039439    -7.05   0.000     -.035542    -.020082
+  sum_combat |   .0007475   .0001842     4.06   0.000     .0003864    .0011087
+         age |     .13774   .0032112    42.89   0.000     .1314461    .1440339
+      age_sq |  -.0022706   .0000626   -36.24   0.000    -.0023934   -.0021478
+       _cons |  -1.678741   .0404253   -41.53   0.000    -1.757973   -1.599508
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/table_6_col3.xls
+dir : seeout
+
+.         
+. 
+. *** Table 6, Panel B 
+. foreach var in age_marr {
+  2.         foreach var2 in totmoves_not {
+  3.                         foreach cond in all  {
+  4.                         areg `var' `var2' `demos_`var'' if `cond' == 1  & sample_`var'_us == 1
+> , robust absorb(exper_br_year_sex_fe)
+  5.                         qui summ `var' if e(sample) == 1, de
+  6.                         local mean = r(mean)
+  7.                         qui summ `var2' if e(sample) == 1, de
+  8.                         local mean2 = r(mean)
+  9.                         outreg2  using $outsheet/table_6_col3.xls,  label ctitle("`var'")  dec
+> (3) addtex(Mean, `mean', Indep Mean, `mean2') keep(`var2') 
+ 10.                                 
+.                         }
+ 11. 
+. 
+.                         }       
+ 12.         }
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =     58,589
+Absorbed variable: exper_br_year_sex_fe         No. of categories =      9,660
+                                                F(  10,  48919)   =     275.45
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.3445
+                                                Adj R-squared     =     0.2150
+                                                Root MSE          =     2.6974
+
+------------------------------------------------------------------------------
+             |               Robust
+    age_marr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+totmoves_not |   .2303035   .0324661     7.09   0.000     .1666694    .2939375
+      female |          0  (omitted)
+         ged |   .3021355   .0518599     5.83   0.000     .2004895    .4037815
+         hsd |   .2474866   .1471588     1.68   0.093    -.0409464    .5359196
+     asc_smc |   2.225151   .0615028    36.18   0.000     2.104604    2.345697
+  college_pl |    3.83617   .1221852    31.40   0.000     3.596685    4.075654
+       afqsc |   .0038124   .0008439     4.52   0.000     .0021583    .0054664
+       black |   .3912589      .0371    10.55   0.000     .3185424    .4639755
+    hispanic |   .0525588   .0418271     1.26   0.209    -.0294229    .1345405
+  other_race |   .4826699    .062986     7.66   0.000     .3592165    .6061234
+  sum_combat |    .040068   .0021852    18.34   0.000     .0357849    .0443511
+       _cons |   21.60635   .0559565   386.13   0.000     21.49668    21.71603
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/table_6_col3.xls
+dir : seeout
+
+.         
+. 
+. *** Table 6, Panel C 
+. foreach var in married {
+  2.         foreach var2 in totmoves_not {
+  3.                         foreach cond in all  {
+  4.                         areg `var' `var2' `demos_`var'' if `cond' == 1  & sample_`var'_us == 1
+> , robust absorb(exper_br_year_sex_fe)
+  5.                         qui summ `var' if e(sample) == 1, de
+  6.                         local mean = r(mean)
+  7.                         qui summ `var2' if e(sample) == 1, de
+  8.                         local mean2 = r(mean)
+  9.                         outreg2  using $outsheet/table_6_col3.xls, label ctitle("`var'") dec(3
+> ) addtex(Mean, `mean', Indep Mean, `mean2') keep(`var2') 
+ 10.                                 
+.                         }
+ 11. 
+. 
+.                         }       
+ 12.         }
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    279,302
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     15,287
+                                                F(  12, 264003)   =    2213.23
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1918
+                                                Adj R-squared     =     0.1450
+                                                Root MSE          =     0.4476
+
+------------------------------------------------------------------------------
+             |               Robust
+     married |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+totmoves_not |   .0611019   .0028847    21.18   0.000      .055448    .0667558
+      female |          0  (omitted)
+         ged |   .0742474   .0034114    21.76   0.000     .0675612    .0809336
+         hsd |   .0490134   .0110096     4.45   0.000     .0274349    .0705919
+     asc_smc |    -.02926   .0040291    -7.26   0.000     -.037157   -.0213631
+  college_pl |  -.1265598   .0073897   -17.13   0.000    -.1410434   -.1120763
+       afqsc |  -.0010318   .0000557   -18.52   0.000     -.001141   -.0009226
+       black |  -.0439596   .0025191   -17.45   0.000     -.048897   -.0390223
+    hispanic |   .0518715   .0030501    17.01   0.000     .0458933    .0578497
+  other_race |  -.0342702   .0038651    -8.87   0.000    -.0418456   -.0266948
+  sum_combat |  -.0059054   .0001802   -32.78   0.000    -.0062585   -.0055523
+         age |   .1842069   .0056152    32.81   0.000     .1732013    .1952125
+      age_sq |  -.0026946   .0001066   -25.27   0.000    -.0029036   -.0024856
+       _cons |  -2.365727   .0717389   -32.98   0.000    -2.506333   -2.225121
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/table_6_col3.xls
+dir : seeout
+
+.         
+. 
+. *** Table 6, Panel D
+. foreach var in everkids {
+  2.         foreach var2 in totmoves_not {
+  3.                         foreach cond in all  {
+  4.                         areg `var' `var2' `demos_`var'' if `cond' == 1  & sample_`var'_us == 1
+> , robust absorb(exper_br_year_sex_fe)
+  5.                         qui summ `var' if e(sample) == 1, de
+  6.                         local mean = r(mean)
+  7.                         qui summ `var2' if e(sample) == 1, de
+  8.                         local mean2 = r(mean)
+  9.                         outreg2  using $outsheet/table_6_col3.xls, label ctitle("`var'") dec(3
+> ) addtex(Mean, `mean', Indep Mean, `mean2') keep(`var2') 
+ 10.                                 
+.                         }
+ 11. 
+.         }
+ 12.         
+. }
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    247,424
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     14,524
+                                                F(  12, 232888)   =     688.37
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1407
+                                                Adj R-squared     =     0.0871
+                                                Root MSE          =     0.3339
+
+------------------------------------------------------------------------------
+             |               Robust
+    everkids |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+totmoves_not |   .0612188   .0025567    23.94   0.000     .0562076    .0662299
+      female |          0  (omitted)
+         ged |   .0268123   .0029467     9.10   0.000      .021037    .0325877
+         hsd |   .0246325   .0093588     2.63   0.008     .0062895    .0429754
+     asc_smc |  -.0150673   .0035126    -4.29   0.000    -.0219519   -.0081827
+  college_pl |  -.0883029   .0064285   -13.74   0.000    -.1009026   -.0757032
+       afqsc |  -.0005005   .0000439   -11.40   0.000    -.0005865   -.0004145
+       black |   .0261802   .0020753    12.61   0.000     .0221126    .0302478
+    hispanic |   .0337934   .0025809    13.09   0.000     .0287349    .0388518
+  other_race |  -.0134271   .0030202    -4.45   0.000    -.0193466   -.0075075
+  sum_combat |  -.0014035   .0001511    -9.29   0.000    -.0016996   -.0011074
+         age |   .0880441   .0024804    35.50   0.000     .0831826    .0929056
+      age_sq |  -.0012932   .0000487   -26.58   0.000    -.0013886   -.0011978
+       _cons |  -1.173435   .0310605   -37.78   0.000    -1.234313   -1.112558
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/table_6_col3.xls
+dir : seeout
+
+. *** Table 6, Panel E 
+. foreach var in everdissolve {
+  2.         foreach var2 in totmoves_not {
+  3.                         foreach cond in all  {
+  4.                         areg `var' `var2' `demos_`var'' if `cond' == 1  & sample_`var'_us == 1
+> , robust absorb(exper_br_year_sex_fe)
+  5.                         qui summ `var' if e(sample) == 1, de
+  6.                         local mean = r(mean)
+  7.                         qui summ `var2' if e(sample) == 1, de
+  8.                         local mean2 = r(mean)
+  9.                         outreg2  using $outsheet/table_6_col3.xls, label ctitle("`var'") dec(3
+> ) addtex(Mean, `mean', Indep Mean, `mean2') keep(`var2') 
+ 10.                                 
+.                         }
+ 11.         
+.         }
+ 12.         
+. }
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    107,961
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     12,535
+                                                F(  12,  95414)   =     105.74
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2013
+                                                Adj R-squared     =     0.0963
+                                                Root MSE          =     0.2051
+
+------------------------------------------------------------------------------
+             |               Robust
+everdissolve |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+totmoves_not |   .0134509   .0021307     6.31   0.000     .0092748    .0176271
+      female |          0  (omitted)
+         ged |   .0028452   .0022816     1.25   0.212    -.0016267    .0073172
+         hsd |   .0134279   .0081491     1.65   0.099    -.0025442       .0294
+     asc_smc |   .0058757   .0030339     1.94   0.053    -.0000707    .0118221
+  college_pl |  -.0150613   .0050856    -2.96   0.003     -.025029   -.0050936
+       afqsc |   8.96e-06   .0000432     0.21   0.836    -.0000758    .0000937
+       black |   -.013016   .0019415    -6.70   0.000    -.0168214   -.0092106
+    hispanic |  -.0065207   .0021061    -3.10   0.002    -.0106488   -.0023927
+  other_race |  -.0121569   .0030635    -3.97   0.000    -.0181612   -.0061525
+  sum_combat |   .0014908    .000139    10.72   0.000     .0012183    .0017633
+         age |   .0105611    .001981     5.33   0.000     .0066785    .0144438
+      age_sq |  -.0000749    .000037    -2.02   0.043    -.0001474   -2.39e-06
+       _cons |  -.1753525   .0259629    -6.75   0.000    -.2262395   -.1244655
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/table_6_col3.xls
+dir : seeout
+
+. 
+. exit
+
+end of do-file
+
+

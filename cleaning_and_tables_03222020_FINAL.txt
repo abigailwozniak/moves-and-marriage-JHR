@@ -1,0 +1,3211 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  XXX/jhr_output/cleaning_a
+> nd_tables_03222020.txt
+  log type:  text
+ opened on:  22 Mar 2021, 11:25:11
+
+.         global figdir XXX/figs_miles
+
+.         global outsheet XXX/jhr_outp
+> ut
+
+. 
+. 
+. foreach var in 5 {
+  2. if `to_`var'' {
+  3.         use $datadir/initial_data
+  4.         local yos = `var'
+  5.         local group to_`var'
+  6. }
+  7. }
+
+. 
+. 
+. compress
+  variable filedt_s was float now int
+  variable sum_combat was float now byte
+  variable min_combat_filedt_s was float now int
+  variable year was float now int
+  variable pna_end_dt was float now int
+  variable next_move_5 was int now byte
+  variable next_move_8 was int now byte
+  variable next_move_10 was int now byte
+  variable next_move_12 was int now byte
+  variable next_move_20 was int now byte
+  variable msa was float now int
+  variable state_fips was float now byte
+  variable re was float now byte
+  variable edgrp4 was float now byte
+  variable metaread_old was float now int
+  variable female was float now byte
+  variable metaread was float now int
+  variable statefip was float now byte
+  variable age_marr was float now int
+  variable date_first_kids was float now int
+  variable date_first_notmarr was float now int
+  variable spells_startdate was float now int
+  variable spells_re_enlist was float now byte
+  variable num_ssn3 was float now byte
+  variable maxyos was float now byte
+  variable new_terms was float now byte
+  variable onetermonly was float now byte
+  variable evermarr was float now byte
+  variable everdissolve was float now byte
+  variable everkids was float now byte
+  variable maxpaygr was float now byte
+  variable prom_early was float now byte
+  variable state was str5 now str2
+  variable msa_new was str6 now str4
+  (310,818,960 bytes saved)
+
+. 
+. 
+. drop _merge
+
+. 
+. *** merging in the county data on ammenities
+. gen county_fips = countyfips
+(464,136 missing values generated)
+
+. destring county_fips, replace
+county_fips: all characters numeric; replaced as long
+(464136 missing values generated)
+
+. merge m:1 county_fips using $datadir/county_natamen.dta
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     1,049,493
+        from master                 1,046,967  (_merge==1)
+        from using                      2,526  (_merge==2)
+
+    matched                         2,838,270  (_merge==3)
+    -----------------------------------------
+
+. 
+. ren _merge merge_ammen
+
+. 
+. drop metaread
+
+. ren metaread_old metaread
+
+. 
+. replace metaread = 8840 if state == "DC"
+(2,354 real changes made)
+
+. 
+. merge m:1 metaread year using $datadir/median_2br_rent_allyrs
+(note: variable year was int, now float to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     1,759,829
+        from master                 1,755,097  (_merge==1)
+        from using                      4,732  (_merge==2)
+
+    matched                         2,132,666  (_merge==3)
+    -----------------------------------------
+
+. ren _merge merge_2br
+
+. 
+. drop statefip
+
+. 
+.         gen statefip = .
+(3,892,495 missing values generated)
+
+. 
+.         replace statefip = 1 if state == "AL"
+(43,114 real changes made)
+
+.         replace statefip = 2 if state == "AK"
+(69,084 real changes made)
+
+.         replace statefip = 4 if state == "AZ"
+(41,230 real changes made)
+
+.         replace statefip = 5 if state == "AR"
+(369 real changes made)
+
+.         replace statefip = 6 if state == "CA"
+(54,014 real changes made)
+
+.         replace statefip = 8 if state == "CO"
+(118,248 real changes made)
+
+.         replace statefip = 9 if state == "CT"
+(66 real changes made)
+
+.         replace statefip = 10 if state == "DE"
+(11 real changes made)
+
+.         replace statefip = 12 if state == "FL"
+(10,295 real changes made)
+
+.         replace statefip = 13 if state == "GA"
+(425,574 real changes made)
+
+.         replace statefip = 15 if state == "HI"
+(128,075 real changes made)
+
+.         replace statefip = 16 if state == "ID"
+(11 real changes made)
+
+.         replace statefip = 17 if state == "IL"
+(1,165 real changes made)
+
+.         replace statefip = 18 if state == "IN"
+(4,270 real changes made)
+
+.         replace statefip = 19 if state == "IA"
+(169 real changes made)
+
+.         replace statefip = 20 if state == "KS"
+(91,804 real changes made)
+
+.         replace statefip = 21 if state == "KY"
+(271,893 real changes made)
+
+.         replace statefip = 22 if state == "LA"
+(62,334 real changes made)
+
+.         replace statefip = 23 if state == "ME"
+(330 real changes made)
+
+.         replace statefip = 24 if state == "MD"
+(53,172 real changes made)
+
+.         replace statefip = 25 if state == "MA"
+(2,623 real changes made)
+
+.         replace statefip = 26 if state == "MI"
+(651 real changes made)
+
+.         replace statefip = 27 if state == "MN"
+(323 real changes made)
+
+.         replace statefip = 28 if state == "MS"
+(364 real changes made)
+
+.         replace statefip = 29 if state == "MO"
+(121,860 real changes made)
+
+.         replace statefip = 30 if state == "MT"
+(15 real changes made)
+
+.         replace statefip = 31 if state == "NE"
+(51 real changes made)
+
+.         replace statefip = 32 if state == "NV"
+(49 real changes made)
+
+.         replace statefip = 33 if state == "NH"
+(23 real changes made)
+
+.         replace statefip = 34 if state == "NJ"
+(5,743 real changes made)
+
+.         replace statefip = 35 if state == "NM"
+(3,656 real changes made)
+
+.         replace statefip = 36 if state == "NY"
+(100,405 real changes made)
+
+.         replace statefip = 37 if state == "NC"
+(281,027 real changes made)
+
+.         replace statefip = 38 if state == "ND"
+(10 real changes made)
+
+.         replace statefip = 39 if state == "OH"
+(541 real changes made)
+
+.         replace statefip = 40 if state == "OK"
+(119,931 real changes made)
+
+.         replace statefip = 41 if state == "OR"
+(261 real changes made)
+
+.         replace statefip = 42 if state == "PA"
+(1,690 real changes made)
+
+.         replace statefip = 44 if state == "RI"
+(37 real changes made)
+
+.         replace statefip = 45 if state == "SC"
+(178,374 real changes made)
+
+.         replace statefip = 46 if state == "SD"
+(62 real changes made)
+
+.         replace statefip = 47 if state == "TN"
+(347 real changes made)
+
+.         replace statefip = 48 if state == "TX"
+(474,249 real changes made)
+
+.         replace statefip = 49 if state == "UT"
+(793 real changes made)
+
+.         replace statefip = 50 if state == "VT"
+(14 real changes made)
+
+.         replace statefip = 51 if state == "VA"
+(168,855 real changes made)
+
+.         replace statefip = 53 if state == "WA"
+(145,885 real changes made)
+
+.         replace statefip = 54 if state == "WV"
+(183 real changes made)
+
+.         replace statefip = 55 if state == "WI"
+(426 real changes made)
+
+.         replace statefip = 56 if state == "WY"
+(11 real changes made)
+
+. 
+. *ren state_fip statefip
+. merge m:1 statefip year using $datadir/median_2br_rent_state_allyrs_2
+(label statefip_lbl already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       910,204
+        from master                   909,961  (_merge==1)
+        from using                        243  (_merge==2)
+
+    matched                         2,982,534  (_merge==3)
+    -----------------------------------------
+
+. ren _merge merge_2br_state
+
+. 
+. replace md_rrentgrsi = md_rrentgrsi_state if md_rrentgrsi == . & merge_2br_state == 3
+(868,028 real changes made)
+
+. 
+. 
+. *** merge in share employment data using msa
+.         drop shcon shman shgov shmil 
+
+.         
+.         merge m:1 msa year using $datadir/BEA_msa, keepusing(shcon shman shgov shmil shsvc)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     1,593,376
+        from master                 1,580,679  (_merge==1)
+        from using                     12,697  (_merge==2)
+
+    matched                         2,312,059  (_merge==3)
+    -----------------------------------------
+
+.         foreach var in shcon shman shgov shmil shsvc {
+  2.         ren `var' `var'msa
+  3.         }
+
+.         tab _merge
+
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+        master only (1) |  1,580,679       40.47       40.47
+         using only (2) |     12,697        0.33       40.80
+            matched (3) |  2,312,059       59.20      100.00
+------------------------+-----------------------------------
+                  Total |  3,905,435      100.00
+
+.         drop if _merge == 2
+(12,697 observations deleted)
+
+.         ren _merge merge_msa2
+
+.         sort state_fips year
+
+.         merge m:1 state_fips year using $datadir/BEA_state, keepusing(shcon shman shgov shmil shs
+> vc)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       944,285
+        from master                   943,130  (_merge==1)
+        from using                      1,155  (_merge==2)
+
+    matched                         2,949,608  (_merge==3)
+    -----------------------------------------
+
+.         tab _merge
+
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+        master only (1) |    943,130       24.22       24.22
+         using only (2) |      1,155        0.03       24.25
+            matched (3) |  2,949,608       75.75      100.00
+------------------------+-----------------------------------
+                  Total |  3,893,893      100.00
+
+. 
+.         foreach var in shcon shman shgov shmil shsvc {
+  2.         ren `var' `var'state
+  3.         }
+
+.         drop if _merge == 2
+(1,155 observations deleted)
+
+.         ren _merge merge_state_year2
+
+.         
+.         foreach var in shcon shman shgov shmil shsvc {
+  2.         gen `var' = `var'msa if merge_msa2 == 3
+  3.         replace `var' = `var'state if merge_state_year2 == 3 & (merge_msa2 ~= 3 | msa == . | `
+> var'msa == .)
+  4.         }
+(1,580,693 missing values generated)
+(657,953 real changes made)
+(1,580,752 missing values generated)
+(657,796 real changes made)
+(1,580,679 missing values generated)
+(658,000 real changes made)
+(1,580,679 missing values generated)
+(658,000 real changes made)
+(1,580,679 missing values generated)
+(658,000 real changes made)
+
+. 
+. *** creating the first arloc for someone - for clustering
+.         sort id training filedt_s
+
+.         bys id training: gen first = _n
+
+.         replace first = 0 if first ~= 1
+(3,142,410 real changes made)
+
+. 
+.         egen arlocnum = group(arloc)
+(7,501 missing values generated)
+
+.         gen tempx = arlocnum if first == 1 & training == 0
+(3,514,368 missing values generated)
+
+.         bys id: egen first_arlocnum = max(tempx) 
+(7,501 missing values generated)
+
+.         drop tempx
+
+. 
+. **** first_term variable
+.         sort id filedt_s
+
+.         by id: gen numterm = _n
+
+.         gen tempterm6 = real(terms) if numterm == 1
+(3,517,020 missing values generated)
+
+.         
+.         bys id: egen term_first = max(tempterm6)
+(32,333 missing values generated)
+
+.         
+. drop tempterm6
+
+. 
+.         gen tempterm6 = terms == "6" & numterm == 1
+
+.         
+.         bys id: egen term6 = max(tempterm6)
+
+. 
+. forvalues x=3/4 {
+  2.         gen tempterm`x' = terms == "`x'" & numterm == 1
+  3.         
+.         bys id: egen term`x' = max(tempterm`x')
+  4.         }
+
+. forvalues x=5/5 {
+  2.         gen tempterm`x' = terms == "`x'" & numterm == 1
+  3.         
+.         bys id: egen terms`x' = max(tempterm`x')
+  4.         }
+
+. 
+. ****** location variables
+. 
+. *** creating weighted average epops
+. 
+.         ** time under an epop if not in training
+.         gen epoptime = filedt_s[_n+1] - filedt_s if training == 0 & id == id[_n+1] & training[_n+
+> 1] == 0
+(1,956,313 missing values generated)
+
+.         gen epop_x_time = epop * epoptime if training == 0
+(2,429,324 missing values generated)
+
+.         sort id filedt_s
+
+.         by id: gen sumtime = sum(epoptime) if epop ~= .
+(922,679 missing values generated)
+
+.         
+.         sort id filedt_s
+
+.         by id: gen sum_epop_x_time = sum(epop_x_time)
+
+.         gen avg_epop = sum_epop_x_time/sumtime
+(1,788,656 missing values generated)
+
+.         replace avg_epop = . if filedt_s > td(31dec2010)
+(11,888 real changes made, 11,888 to missing)
+
+.         replace avg_epop = . if sum_epop_x_time == 0
+(0 real changes made)
+
+. 
+. *** creating weighted average cell shares using the same method as epop
+.         
+.         sort id training filedt_s
+
+.         
+.         gen celltime = filedt_s[_n+1] - filedt_s if training == 0 & id == id[_n+1] & training[_n+
+> 1] == 0
+(1,667,995 missing values generated)
+
+.         gen cell_x_time = cellsharei * celltime if training == 0
+(2,264,592 missing values generated)
+
+.         sort id filedt_s
+
+.         by id: gen sumtime2 = sum(celltime) if cellsharei ~= .
+(931,079 missing values generated)
+
+. 
+.         sort id filedt_s
+
+.         by id: gen sum_cell_x_time = sum(cell_x_time)
+
+.         gen avg_cellshare = sum_cell_x_time/sumtime2
+(1,741,560 missing values generated)
+
+.         replace avg_cellshare = . if sum_cell_x_time == 0
+(0 real changes made)
+
+.         
+. *** creating weighted average cell poi using the same method as epop
+.         
+.         drop celltime cell_x_time sumtime2 sum_cell_x_time
+
+.         sort id training filedt_s
+
+.         
+.         gen celltime = filedt_s[_n+1] - filedt_s if training == 0 & id == id[_n+1] & training[_n+
+> 1] == 0
+(1,667,995 missing values generated)
+
+.         gen cell_x_time = cellpopi * celltime if training == 0 & merge_marriage_market_msa == 3
+(2,678,151 missing values generated)
+
+.         sort id filedt_s
+
+.         by id: gen sumtime2 = sum(celltime) if cellpopi ~= .
+(931,079 missing values generated)
+
+. 
+.         sort id filedt_s
+
+.         by id: gen sum_cell_x_time = sum(cell_x_time)
+
+.         gen avg_cellpop = sum_cell_x_time/sumtime2
+(1,741,560 missing values generated)
+
+.         replace avg_cellpop = . if sum_cell_x_time == 0
+(471,750 real changes made, 471,750 to missing)
+
+.         
+.         gen not_in_msa = merge_marriage_market_msa ~= 3 & training == 0
+
+.         bys id: egen ever_not_in_msa = max(not_in_msa)
+
+.         
+.         replace avg_cellpop = . if ever_not_in_msa == 1
+(897,006 real changes made, 897,006 to missing)
+
+.         
+. *** creating weighted average 2br rent price
+.         
+.         drop celltime cell_x_time sumtime2 sum_cell_x_time
+
+.         sort id training filedt_s
+
+.         
+.         gen celltime = filedt_s[_n+1] - filedt_s if training == 0 & id == id[_n+1] & training[_n+
+> 1] == 0
+(1,667,995 missing values generated)
+
+.         gen cell_x_time = md_rrentgrsi * celltime if training == 0 & md_rrentgrsi ~= .
+(2,249,167 missing values generated)
+
+.         sort id filedt_s
+
+.         by id: gen sumtime2 = sum(celltime) if md_rrentgrsi ~= .
+(887,535 missing values generated)
+
+. 
+.         sort id filedt_s
+
+.         by id: gen sum_cell_x_time = sum(cell_x_time)
+
+.         gen avg_cell2br = sum_cell_x_time/sumtime2
+(1,721,248 missing values generated)
+
+.         replace avg_cell2br = . if sum_cell_x_time == 0
+(0 real changes made)
+
+.         
+.         gen not_in_2br = md_rrentgrsi == . & training == 0
+
+.         bys id: egen ever_not_in_2br = max(not_in_2br)
+
+.         
+.         replace avg_cell2br = . if ever_not_in_2br == 1 
+(894,004 real changes made, 894,004 to missing)
+
+. 
+. *** creating weighted average ammenities
+.         
+.         drop celltime cell_x_time sumtime2 sum_cell_x_time
+
+.         sort id training filedt_s
+
+.         
+.         gen celltime = filedt_s[_n+1] - filedt_s if training == 0 & id == id[_n+1] & training[_n+
+> 1] == 0
+(1,667,995 missing values generated)
+
+.         gen cell_x_time = amenityscale * celltime if training == 0 & amenityscale ~= .
+(2,371,684 missing values generated)
+
+.         sort id filedt_s
+
+.         by id: gen sumtime2 = sum(celltime) if amenityscale ~= .
+(1,051,942 missing values generated)
+
+. 
+.         sort id filedt_s
+
+.         by id: gen sum_cell_x_time = sum(cell_x_time)
+
+.         gen avg_cell_amm = sum_cell_x_time/sumtime2
+(1,888,119 missing values generated)
+
+.         replace avg_cell_amm = . if sum_cell_x_time == 0
+(4 real changes made, 4 to missing)
+
+.         
+.         gen not_in_amm = amenityscale == . & training == 0
+
+.         bys id: egen ever_not_in_amm = max(not_in_amm)
+
+.         
+.         replace avg_cell_amm = . if ever_not_in_amm == 1
+(981,396 real changes made, 981,396 to missing)
+
+.         
+. *** shcon shman shgov shmil shsvc
+. foreach var in shcon shman shgov shmil shsvc {
+  2.         drop celltime cell_x_time sumtime2 sum_cell_x_time
+  3.         sort id training filedt_s
+  4.         
+.         gen celltime = filedt_s[_n+1] - filedt_s if training == 0 & id == id[_n+1] & training[_n+
+> 1] == 0
+  5.         gen cell_x_time = `var' * celltime if training == 0 & `var' ~= .
+  6.         sort id filedt_s
+  7.         by id: gen sumtime2 = sum(celltime) if `var' ~= .
+  8. 
+.         sort id filedt_s
+  9.         by id: gen sum_cell_x_time = sum(cell_x_time)
+ 10.         gen avg_`var' = sum_cell_x_time/sumtime2
+ 11.         replace avg_`var' = . if sum_cell_x_time == 0
+ 12.         
+.         gen not_in_`var' = `var' == . & training == 0
+ 13.         bys id: egen ever_not_in_`var' = max(not_in_`var')
+ 14.         replace avg_`var' = . if filedt_s > td(31dec2010)
+ 15. 
+.         replace avg_`var' = . if ever_not_in_`var' == 1
+ 16. }
+(1,667,995 missing values generated)
+(2,253,592 missing values generated)
+(922,740 missing values generated)
+(1,751,705 missing values generated)
+(0 real changes made)
+(11,911 real changes made, 11,911 to missing)
+(970,066 real changes made, 970,066 to missing)
+(1,667,995 missing values generated)
+(2,253,753 missing values generated)
+(922,956 missing values generated)
+(1,751,938 missing values generated)
+(0 real changes made)
+(11,908 real changes made, 11,908 to missing)
+(970,137 real changes made, 970,137 to missing)
+(1,667,995 missing values generated)
+(2,253,557 missing values generated)
+(922,679 missing values generated)
+(1,751,659 missing values generated)
+(0 real changes made)
+(11,912 real changes made, 11,912 to missing)
+(969,945 real changes made, 969,945 to missing)
+(1,667,995 missing values generated)
+(2,253,557 missing values generated)
+(922,679 missing values generated)
+(1,751,659 missing values generated)
+(0 real changes made)
+(11,912 real changes made, 11,912 to missing)
+(969,945 real changes made, 969,945 to missing)
+(1,667,995 missing values generated)
+(2,253,557 missing values generated)
+(922,679 missing values generated)
+(1,751,659 missing values generated)
+(0 real changes made)
+(11,912 real changes made, 11,912 to missing)
+(969,945 real changes made, 969,945 to missing)
+
+. 
+. 
+. 
+. *** going to create worse move if moving to a location with more than 1 standard deviation from t
+> he previous.  
+. 
+. ** first need to create standard deviation of all possible locations
+. 
+. foreach var in epop amenityrank md_rrentgrsi cellsharei shcon shman shgov shmil shsvc {
+  2.         egen tempz2_`var' = std(`var')
+  3.         }
+(922,679 missing values generated)
+(1,051,942 missing values generated)
+(887,535 missing values generated)
+(931,079 missing values generated)
+(922,740 missing values generated)
+(922,956 missing values generated)
+(922,679 missing values generated)
+(922,679 missing values generated)
+(922,679 missing values generated)
+
+.         
+. *** moving to a worse location in terms of cell size
+.         sort id training filedt_s
+
+.         gen worse_location = tempz2_cellsharei < (tempz2_cellsharei[_n-1]-1)  if training == 0 & 
+> training[_n-1] == 0 & id == id[_n-1] & abroad ~= 1 & cellsharei[_n-1] ~= . & cellsharei ~= . & mo
+> ve_not == 1
+(3,751,778 missing values generated)
+
+.         gen better_location = (tempz2_cellsharei[_n-1]+1) < tempz2_cellsharei  if training == 0 &
+>  training[_n-1] == 0 & id == id[_n-1] & abroad ~= 1 & cellsharei ~= . & cellsharei[_n-1] ~= . & m
+> ove_not == 1
+(3,751,778 missing values generated)
+
+.         
+.         gen worse_epop = tempz2_epop < (tempz2_epop[_n-1]-1) if training == 0 & training[_n-1] ==
+>  0 & id == id[_n-1] & abroad ~= 1 & epop[_n-1] ~= . & epop ~= . & move_not == 1
+(3,752,945 missing values generated)
+
+.         gen better_epop = (tempz2_epop[_n-1]+1) < (tempz2_epop)  if training == 0 & training[_n-1
+> ] == 0 & id == id[_n-1] & abroad ~= 1 & epop[_n-1] ~= . & epop ~= . & move_not == 1
+(3,752,945 missing values generated)
+
+.         
+.         
+.         gen worse_amm = tempz2_amenityrank < (tempz2_amenityrank[_n-1]-1)  if training == 0 & tra
+> ining[_n-1] == 0 & id == id[_n-1] & abroad ~= 1 & amenityrank[_n-1] ~= . & amenityrank ~= . & mov
+> e_not == 1
+(3,783,244 missing values generated)
+
+.         gen better_amm = (tempz2_amenityrank[_n-1]+1) < (tempz2_amenityrank) if training == 0 & t
+> raining[_n-1] == 0 & id == id[_n-1] & abroad ~= 1 & amenityrank[_n-1] ~= . & amenityrank ~= . & m
+> ove_not == 1
+(3,783,244 missing values generated)
+
+. 
+. foreach var in shcon shman shgov shmil shsvc {
+  2.         gen worse_`var' = tempz2_`var' < (tempz2_`var'[_n-1]-1)  if training == 0 & training[_
+> n-1] == 0 & id == id[_n-1] & abroad ~= 1 & `var'[_n-1] ~= . & `var' ~= . & move_not == 1
+  3.         gen better_`var' = (tempz2_`var'[_n-1]+1) < (tempz2_`var') if training == 0 & training
+> [_n-1] == 0 & id == id[_n-1] & abroad ~= 1 & `var'[_n-1] ~= . & `var' ~= . & move_not == 1
+  4.         }
+(3,752,961 missing values generated)
+(3,752,961 missing values generated)
+(3,753,005 missing values generated)
+(3,753,005 missing values generated)
+(3,752,945 missing values generated)
+(3,752,945 missing values generated)
+(3,752,945 missing values generated)
+(3,752,945 missing values generated)
+(3,752,945 missing values generated)
+(3,752,945 missing values generated)
+
+.         
+.         gen more_exp_rent = tempz2_md_rrentgrsi > (tempz2_md_rrentgrsi[_n-1]+1) if move_not == 1 
+> & training == 0 & training[_n-1] == 0 & id == id[_n-1]  & abroad ~= 1 & md_rrentgrsi[_n-1] ~= . &
+>  md_rrentgrsi ~= . 
+(3,750,151 missing values generated)
+
+.         gen less_exp_rent = (tempz2_md_rrentgrsi[_n-1]+1) > (tempz2_md_rrentgrsi) if move_not == 
+> 1 & training == 0 & training[_n-1] == 0 & id == id[_n-1] & abroad ~= 1 & md_rrentgrsi[_n-1] ~= . 
+> & md_rrentgrsi ~= . 
+(3,750,151 missing values generated)
+
+. 
+. foreach var in tempz2_cellsharei tempz2_epop tempz2_amenityrank tempz2_md_rrentgrsi tempz2_shcon 
+> tempz2_shman tempz2_shgov tempz2_shmil tempz2_shsvc {
+  2.         gen ch_`var' = `var' - `var'[_n-1] if training == 0 & training[_n-1] == 0 & id == id[_
+> n-1] & abroad ~= 1 & `var'[_n-1] ~= . & `var' ~= . & move_not == 1
+  3. }       
+(3,751,778 missing values generated)
+(3,752,945 missing values generated)
+(3,783,244 missing values generated)
+(3,750,151 missing values generated)
+(3,752,961 missing values generated)
+(3,753,005 missing values generated)
+(3,752,945 missing values generated)
+(3,752,945 missing values generated)
+(3,752,945 missing values generated)
+
+.         
+.         
+. *** creating variable for initial rank
+.         bys id: egen mind = min(filedt_s)
+(7,501 missing values generated)
+
+.         gen temprank = real(substr(grade, 3, 1))
+(7,501 missing values generated)
+
+.         gen initial_rank_temp = temprank if filedt_s == mind
+(3,514,368 missing values generated)
+
+.         bys id: egen initial_rank = max(initial_rank_temp)
+(7,501 missing values generated)
+
+. 
+.         
+. *** variable for large posts
+.         bys id arloc year: gen num_id_arloc_yr = _n
+
+.         replace num_id_arloc_yr = . if num_id_arloc_yr ~= 1
+(811,491 real changes made, 811,491 to missing)
+
+.         bys arloc year: egen tot_arloc_year = total(num_id_arloc_yr)
+
+.         bys arloc year: gen num_arloc_yr = _n
+
+.         summ tot_arloc_year if num_arloc_yr == 1, de
+
+                       tot_arloc_year
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              11,164
+25%            2              1       Sum of Wgt.      11,164
+
+50%           11                      Mean           275.9985
+                        Largest       Std. Dev.       1155.77
+75%           83          16656
+90%          386          18293       Variance        1335803
+95%         1099          19432       Skewness       8.016278
+99%         5675          20213       Kurtosis       84.09162
+
+. 
+.         gen large_post = tot_arloc_year >= r(p90)
+
+.         
+.         sort id training filedt_s
+
+.         gen large_to_small = large_post == 0 & move_not == 1 & training == 0 & large_post[_n-1] =
+> = 1 & id == id[_n-1]
+
+.         
+.         
+. *** creating variable for initial year
+.         gen initial_year = year(mind)
+(7,501 missing values generated)
+
+.         
+. *** are people in divisions and bcts?
+.         gen bct = div == 1 | bdereg == 1
+
+. 
+. *** married when enter  
+.         gen temp3 = married == 1 & firstobs == 1
+
+.         bys id: egen m_ent = max(temp3)
+
+.         drop temp3
+
+.         
+. *** kids when enter
+.         gen temp3 = kids == 1 & firstobs == 1
+
+.         bys id: egen kids_ent = max(temp3)
+
+.         drop temp3
+
+.         
+. *** married with less than a year in the Army
+. 
+.         gen less_yr = (filedt_s - startdate <= 365) & filedt_s > startdate
+
+.         gen temp5 = less_yr == 1 & marst == "M" & m_ent == 0
+
+.         bys id: egen mar_lyr = max(temp5)
+
+.         drop temp5
+
+. 
+. *** age when enter
+.         gen temp3 = age if firstobs == 1
+(3,529,368 missing values generated)
+
+.         bys id: egen age_when_enter = max(temp3)
+(162,191 missing values generated)
+
+.         drop temp3
+
+. 
+.         ren _merge merge_old1
+
+. 
+. ** figuring out age when first get married - merging in data from age_marr.do.  also creates vari
+> able for first time not married and first time with kids.
+. 
+.         /*age_marr is a filedt_s*/
+.         gen tempage = age_marr - birthmo
+(819,159 missing values generated)
+
+.         gen date_marr = age_marr
+(816,956 missing values generated)
+
+.         gen tempage2 = tempage/365.25
+(819,159 missing values generated)
+
+.         replace tempage2 = . if tempage2 < 17 | tempage2 > 55
+(400 real changes made, 400 to missing)
+
+.         drop age_marr tempage
+
+.         ren tempage2 age_marr
+
+. 
+. ** timing between marriage and moves
+.         gen marr_filedt_s = date_marr - filedt_s if move_not == 1
+(3,575,660 missing values generated)
+
+.         gen marr2 = abs(marr_filedt_s)
+(3,575,660 missing values generated)
+
+.         bys id: egen marr3 = min(abs(marr_filedt_s))
+(1,434,490 missing values generated)
+
+.         gen marr4 = marr_filedt_s if marr2 == marr3 
+(3,667,290 missing values generated)
+
+.         by id: egen marr5 = min(marr4)
+(1,434,490 missing values generated)
+
+.         by id: gen marr_num = _n
+
+. *       histogram marr5 if marr_num == 1, title("Time Between Marriage and Move") frac xtitle("Ma
+> rriage Date - Move Date")
+. *       graph export $figdir/married_move_`gr'.ps, replace
+. *       histogram marr5 if marr_num == 1 & female == 0, title("Time Since Marriage and Move -- ME
+> N") frac
+. *       graph export $figdir/married_move_`gr'_m.ps, replace
+. *       histogram marr5 if marr_num == 1 & female == 1, title("Time Since Marriage and Move -- WO
+> MEN") frac
+. *       graph export $figdir/married_move_`gr'_f.ps, replace
+.         drop marr_filedt_s marr2 marr3 marr4 marr_num
+
+.         ren marr5 days_to_move
+
+.         gen months_to_move = floor((days_to_move/30))
+(1,434,490 missing values generated)
+
+. 
+. 
+.         gen shot_gun = abs(months_to_move) <= 3
+
+.         replace shot_gun = . if months_to_move == .
+(1,434,490 real changes made, 1,434,490 to missing)
+
+.         
+.         gen m_to_m_l6 = abs(months_to_move) <= 6
+
+.         replace m_to_m_l6 = . if m_ent == 1 | evermarr == 0 | months_to_move == .
+(2,561,312 real changes made, 2,561,312 to missing)
+
+.         
+.         gen m_to_m_g6 = abs(months_to_move) > 6
+
+.         replace m_to_m_g6 = . if  m_ent == 1 | evermarr == 0 | months_to_move == .
+(2,561,312 real changes made, 2,561,312 to missing)
+
+.         
+. *** people who were ever abroad
+.         bys id: egen everabroad = max(abroad)
+(7,501 missing values generated)
+
+.         
+.         
+.         *** first move
+.         gen date_move = filedt_s if move_not == 1
+(3,493,108 missing values generated)
+
+.         bys id: egen min_date_move = min(date_move)
+(803,906 missing values generated)
+
+.         
+. *** same as above, but conditioning on those who were not married 6 months before a move and did 
+> not move again within 24 months. - just for FIRST moves
+. 
+. *** creating a histogram which shows when people's first moves are.  
+. 
+. gen time_since_start_30 = floor((min_date_move - startdate)/30)
+(803,906 missing values generated)
+
+. *histogram time_since_start_30 if filedt_s == min_date_move
+. 
+. *graph export $figdir/time_since_start_30.pdf, replace
+. 
+. preserve 
+
+. keep time_since_start_30 filedt_s min_date_move term3
+
+. save $datadir/app_fig_1, replace
+file XXX/dta/app_fig_1.dta saved
+
+. restore
+
+. 
+. /*
+> *** Data for figure is in jhr_app_fig_1.do
+> ** Appendix C Figure 1
+> 
+> histogram time_since_start_30 if filedt_s == min_date_move & term3 == 1
+> 
+> graph export $figdir/time_since_start_30_term3.pdf, replace
+> tab time_since_start_30 if filedt_s == min_date_move & term3 == 1
+> */
+. 
+. ***** creating yearly variables for new tables eight
+. 
+. gen yr_1 = filedt_s - startdate < 365 if startdate ~= . & filedt_s ~= .
+(7,501 missing values generated)
+
+. gen yr_2 = filedt_s - startdate < 730 & yr_1 == 0 if startdate ~= . & filedt_s ~= .
+(7,501 missing values generated)
+
+. gen yr_3 = filedt_s - startdate < 1095 & yr_1 == 0 & yr_2 == 0 if startdate ~= . & filedt_s ~= .
+(7,501 missing values generated)
+
+. gen yr_4 = filedt_s - startdate < 1460 & yr_1 == 0 & yr_2 == 0 & yr_3 == 0 if startdate ~= . & fi
+> ledt_s ~= .
+(7,501 missing values generated)
+
+. gen yr_5 = filedt_s - startdate < 1825 & yr_1 == 0 & yr_2 == 0 & yr_3 == 0 & yr_4 == 0 if startda
+> te ~= . & filedt_s ~= .
+(7,501 missing values generated)
+
+. 
+. 
+. bys id: egen lastdate = max(filedt_s)
+(7,501 missing values generated)
+
+. 
+. egen arloc_unique = group(arloc)
+(7,501 missing values generated)
+
+. gen temp_first = arloc_unique if first == 1
+(3,142,411 missing values generated)
+
+. gen temp_last = arloc_unique if filedt_s == lastdate
+(3,514,368 missing values generated)
+
+. 
+. 
+. bys id: egen first_arloc = max(temp_first)
+(7,501 missing values generated)
+
+. bys id: egen last_arloc = max(temp_last)
+(7,501 missing values generated)
+
+. 
+. drop temp_first temp_last lastdate
+
+. 
+. forvalues x=1/5 {
+  2. bys id yr_`x': egen married_yr_`x' = max(married) if yr_`x' == 1
+  3. bys id: egen ev_marr_yr_`x' = max(married_yr_`x')
+  4. drop married_yr_`x'
+  5. bys id yr_`x': egen move_yr_`x' = max(move_not) if yr_`x' == 1
+  6. bys id: egen ev_move_yr_`x' = max(move_yr_`x')
+  7. drop move_yr_`x'
+  8. 
+. foreach var in more_exp_rent less_exp_rent worse_location better_location worse_epop better_epop 
+> worse_amm better_amm  {
+  9. bys id yr_`x': egen `var'_yr_`x' = max(`var') if yr_`x' == 1
+ 10. bys id: egen ev_`var'_yr_`x' = max(`var'_yr_`x')
+ 11. drop `var'_yr_`x' 
+ 12. }
+ 13. foreach var in tempz2_cellsharei tempz2_epop tempz2_amenityrank tempz2_md_rrentgrsi tempz2_shc
+> on tempz2_shman tempz2_shgov tempz2_shmil tempz2_shsvc {
+ 14. bys id yr_`x': egen ch_`var'_yr_`x' = max(ch_`var') if yr_`x' == 1
+ 15. bys id: egen ev_ch_`var'_yr_`x' = max(ch_`var'_yr_`x')
+ 16. drop ch_`var'_yr_`x' 
+ 17. }
+ 18. 
+. bys id yr_`x': gen dist_less300_yr_`x' = distance_move_not < 300 & ev_move_yr_`x' == 1 & yr_`x' =
+> = 1
+ 19. bys id: egen ev_dist_less300_yr_`x' = max(dist_less300_yr_`x')
+ 20. 
+. bys id yr_`x': gen dist_300_1000_yr_`x' = distance_move_not >= 300 & distance_move_not < 1000 & e
+> v_move_yr_`x' == 1 & yr_`x' == 1
+ 21. bys id: egen ev_dist_300_1000_yr_`x' = max(dist_300_1000_yr_`x')
+ 22. 
+. bys id yr_`x': gen dist_1000_2000_yr_`x' = distance_move_not >= 1000 & distance_move_not < 2000 &
+>  ev_move_yr_`x' == 1 & yr_`x' == 1
+ 23. bys id: egen ev_dist_1000_2000_yr_`x' = max(dist_1000_2000_yr_`x')
+ 24. 
+. bys id yr_`x': gen dist_2000_3000_yr_`x' = distance_move_not >= 2000 & distance_move_not < 3000 &
+>  ev_move_yr_`x' == 1 & yr_`x' == 1
+ 25. bys id: egen ev_dist_2000_3000_yr_`x' = max(dist_2000_3000_yr_`x')
+ 26. 
+. bys id yr_`x': gen dist_gr_3000_yr_`x' = distance_move_not > 3000 & ev_move_yr_`x' == 1 & yr_`x' 
+> == 1 & distance_move_not ~= .
+ 27. bys id: egen ev_dist_gr_3000_yr_`x' = max(dist_gr_3000_yr_`x')
+ 28. 
+. }
+(2,493,359 missing values generated)
+(13,467 missing values generated)
+(2,491,554 missing values generated)
+(7,572 missing values generated)
+(3,873,840 missing values generated)
+(3,844,633 missing values generated)
+(3,873,840 missing values generated)
+(3,844,633 missing values generated)
+(3,874,326 missing values generated)
+(3,845,858 missing values generated)
+(3,874,326 missing values generated)
+(3,845,858 missing values generated)
+(3,873,868 missing values generated)
+(3,844,698 missing values generated)
+(3,873,868 missing values generated)
+(3,844,698 missing values generated)
+(3,876,159 missing values generated)
+(3,850,969 missing values generated)
+(3,876,159 missing values generated)
+(3,850,969 missing values generated)
+(3,874,326 missing values generated)
+(3,845,858 missing values generated)
+(3,873,868 missing values generated)
+(3,844,698 missing values generated)
+(3,876,159 missing values generated)
+(3,850,969 missing values generated)
+(3,873,840 missing values generated)
+(3,844,633 missing values generated)
+(3,873,868 missing values generated)
+(3,844,698 missing values generated)
+(3,873,872 missing values generated)
+(3,844,710 missing values generated)
+(3,873,868 missing values generated)
+(3,844,698 missing values generated)
+(3,873,868 missing values generated)
+(3,844,698 missing values generated)
+(3,873,868 missing values generated)
+(3,844,698 missing values generated)
+(3,292,503 missing values generated)
+(15,332 missing values generated)
+(3,291,628 missing values generated)
+(7,501 missing values generated)
+(3,870,787 missing values generated)
+(3,798,437 missing values generated)
+(3,870,787 missing values generated)
+(3,798,437 missing values generated)
+(3,871,070 missing values generated)
+(3,799,680 missing values generated)
+(3,871,070 missing values generated)
+(3,799,680 missing values generated)
+(3,870,831 missing values generated)
+(3,798,632 missing values generated)
+(3,870,831 missing values generated)
+(3,798,632 missing values generated)
+(3,876,694 missing values generated)
+(3,824,405 missing values generated)
+(3,876,694 missing values generated)
+(3,824,405 missing values generated)
+(3,871,070 missing values generated)
+(3,799,680 missing values generated)
+(3,870,831 missing values generated)
+(3,798,632 missing values generated)
+(3,876,694 missing values generated)
+(3,824,405 missing values generated)
+(3,870,787 missing values generated)
+(3,798,437 missing values generated)
+(3,870,831 missing values generated)
+(3,798,632 missing values generated)
+(3,870,843 missing values generated)
+(3,798,688 missing values generated)
+(3,870,831 missing values generated)
+(3,798,632 missing values generated)
+(3,870,831 missing values generated)
+(3,798,632 missing values generated)
+(3,870,831 missing values generated)
+(3,798,632 missing values generated)
+(3,260,216 missing values generated)
+(10,832 missing values generated)
+(3,259,738 missing values generated)
+(7,501 missing values generated)
+(3,819,947 missing values generated)
+(3,601,319 missing values generated)
+(3,819,947 missing values generated)
+(3,601,319 missing values generated)
+(3,820,686 missing values generated)
+(3,604,295 missing values generated)
+(3,820,686 missing values generated)
+(3,604,295 missing values generated)
+(3,820,083 missing values generated)
+(3,601,900 missing values generated)
+(3,820,083 missing values generated)
+(3,601,900 missing values generated)
+(3,833,114 missing values generated)
+(3,651,890 missing values generated)
+(3,833,114 missing values generated)
+(3,651,890 missing values generated)
+(3,820,686 missing values generated)
+(3,604,295 missing values generated)
+(3,820,083 missing values generated)
+(3,601,900 missing values generated)
+(3,833,114 missing values generated)
+(3,651,890 missing values generated)
+(3,819,947 missing values generated)
+(3,601,319 missing values generated)
+(3,820,085 missing values generated)
+(3,601,912 missing values generated)
+(3,820,103 missing values generated)
+(3,601,976 missing values generated)
+(3,820,083 missing values generated)
+(3,601,900 missing values generated)
+(3,820,083 missing values generated)
+(3,601,900 missing values generated)
+(3,820,083 missing values generated)
+(3,601,900 missing values generated)
+(3,238,588 missing values generated)
+(10,844 missing values generated)
+(3,238,046 missing values generated)
+(7,501 missing values generated)
+(3,758,318 missing values generated)
+(3,341,750 missing values generated)
+(3,758,318 missing values generated)
+(3,341,750 missing values generated)
+(3,759,550 missing values generated)
+(3,346,931 missing values generated)
+(3,759,550 missing values generated)
+(3,346,931 missing values generated)
+(3,758,630 missing values generated)
+(3,343,013 missing values generated)
+(3,758,630 missing values generated)
+(3,343,013 missing values generated)
+(3,799,032 missing values generated)
+(3,499,820 missing values generated)
+(3,799,032 missing values generated)
+(3,499,820 missing values generated)
+(3,759,550 missing values generated)
+(3,346,931 missing values generated)
+(3,758,630 missing values generated)
+(3,343,013 missing values generated)
+(3,799,032 missing values generated)
+(3,499,820 missing values generated)
+(3,758,318 missing values generated)
+(3,341,750 missing values generated)
+(3,758,645 missing values generated)
+(3,343,077 missing values generated)
+(3,758,673 missing values generated)
+(3,343,205 missing values generated)
+(3,758,630 missing values generated)
+(3,343,013 missing values generated)
+(3,758,630 missing values generated)
+(3,343,013 missing values generated)
+(3,758,630 missing values generated)
+(3,343,013 missing values generated)
+(3,298,068 missing values generated)
+(11,343 missing values generated)
+(3,297,487 missing values generated)
+(7,501 missing values generated)
+(3,777,224 missing values generated)
+(3,373,843 missing values generated)
+(3,777,224 missing values generated)
+(3,373,843 missing values generated)
+(3,778,500 missing values generated)
+(3,379,557 missing values generated)
+(3,778,500 missing values generated)
+(3,379,557 missing values generated)
+(3,783,240 missing values generated)
+(3,398,450 missing values generated)
+(3,783,240 missing values generated)
+(3,398,450 missing values generated)
+(3,805,071 missing values generated)
+(3,492,090 missing values generated)
+(3,805,071 missing values generated)
+(3,492,090 missing values generated)
+(3,778,500 missing values generated)
+(3,379,557 missing values generated)
+(3,783,240 missing values generated)
+(3,398,450 missing values generated)
+(3,805,071 missing values generated)
+(3,492,090 missing values generated)
+(3,777,224 missing values generated)
+(3,373,843 missing values generated)
+(3,783,260 missing values generated)
+(3,398,533 missing values generated)
+(3,783,295 missing values generated)
+(3,398,703 missing values generated)
+(3,783,240 missing values generated)
+(3,398,450 missing values generated)
+(3,783,240 missing values generated)
+(3,398,450 missing values generated)
+(3,783,240 missing values generated)
+(3,398,450 missing values generated)
+
+. 
+. *** creating arloc fixed effects for each year
+.         forvalues x=1/5 {
+  2.         sort id yr_`x' filedt_s training
+  3.         by id yr_`x': gen yrnum = _n
+  4.         gen arloc_yr_`x'_1 = arloc_unique if yr_`x' == 1 & training == 0 & yrnum == 1
+  5.         gen arloc_yr_`x'_2 = arloc_unique if yr_`x' == 1 & training == 0 & yrnum == 2
+  6.         gen arloc_yr_`x'_3 = arloc_unique if yr_`x' == 1 & training == 0 & yrnum == 3
+  7.         bys id: egen ev_arloc_yr_`x'_1 = max(arloc_yr_`x'_1)
+  8.         bys id: egen ev_arloc_yr_`x'_2 = max(arloc_yr_`x'_2)
+  9.         bys id: egen ev_arloc_yr_`x'_3 = max(arloc_yr_`x'_3)
+ 10.         drop yrnum arloc_yr_`x'_*
+ 11.         }
+(3,869,466 missing values generated)
+(3,788,438 missing values generated)
+(3,701,467 missing values generated)
+(3,666,213 missing values generated)
+(2,916,025 missing values generated)
+(2,021,401 missing values generated)
+(3,552,089 missing values generated)
+(3,802,476 missing values generated)
+(3,837,033 missing values generated)
+(456,090 missing values generated)
+(2,835,051 missing values generated)
+(3,184,183 missing values generated)
+(3,549,998 missing values generated)
+(3,796,487 missing values generated)
+(3,829,267 missing values generated)
+(438,968 missing values generated)
+(2,782,797 missing values generated)
+(3,096,759 missing values generated)
+(3,564,048 missing values generated)
+(3,783,574 missing values generated)
+(3,824,941 missing values generated)
+(588,006 missing values generated)
+(2,664,502 missing values generated)
+(3,061,776 missing values generated)
+(3,559,783 missing values generated)
+(3,799,592 missing values generated)
+(3,840,710 missing values generated)
+(542,075 missing values generated)
+(2,831,362 missing values generated)
+(3,250,720 missing values generated)
+
+. 
+. *** only including if have data on the characteristics of the move
+. forvalues x=1/5 {
+  2. foreach var in more_exp_rent less_exp_rent worse_location better_location worse_epop better_ep
+> op worse_amm better_amm ch_tempz2_cellsharei ch_tempz2_epop ch_tempz2_amenityrank ch_tempz2_md_rr
+> entgrsi ch_tempz2_shcon ch_tempz2_shman ch_tempz2_shgov ch_tempz2_shmil ch_tempz2_shsvc {
+  3. replace ev_`var'_yr_`x' = 0 if ev_move_yr_`x' == 0
+  4. }
+  5. }
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,801,788 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(3,139,345 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,797,554 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,529,749 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+(2,685,548 real changes made)
+
+. 
+. *** time since start for first move.
+.         gen temp4 = min_date_move - startdate if filedt_s == min_date_move
+(3,609,983 missing values generated)
+
+.         bys id: egen time_since_start = max(temp4)
+(803,906 missing values generated)
+
+. 
+. *** creating a sample for the figures
+.         
+.         * 1) just first moves
+.         gen figure_sample = 1 if move_not == 1 & filedt_s == min_date_move
+(3,609,983 missing values generated)
+
+.         
+.         * 2) in military for at least 6 months before first move
+.         bys id: egen firstdate = min(filedt_s)
+(7,501 missing values generated)
+
+.         replace figure_sample = 0 if min_date_move < firstdate + 180
+(6,389 real changes made)
+
+.         
+.         *3) in military for at least 2 years after first move
+.         bys id: egen lastdate = max(filedt_s)
+(7,501 missing values generated)
+
+.         replace figure_sample = 0 if lastdate - min_date_move < 730
+(1,781,340 real changes made)
+
+.         
+.         *4) do not move for at least 2 years after first move
+.         sort id move_not filedt_s
+
+.         replace figure_sample = 0 if filedt_s[_n+1] - filedt_s < 730 & move_not == 1 & move_not[_
+> n+1] == 1 & id == id[_n+1]
+(48,851 real changes made)
+
+.         
+.         *5) not married 6 months before first move
+.         replace figure_sample = 0 if date_marr - filedt_s < -180
+(553,388 real changes made)
+
+.         replace figure_sample = 0 if m_ent == 1
+(95,035 real changes made)
+
+.         
+.         *6) not moving from or to an abroad location
+.         sort id training filedt_s
+
+.         gen conus_conus = abroad == 0 & abroad[_n-1] == 0 & training[_n-1] == 0
+
+.         
+.         gen abroad_conus = abroad == 0 & abroad[_n-1] == 1 & training[_n-1] == 0
+
+.         
+.         gen conus_abroad = abroad == 1 & abroad[_n-1] == 0 & training[_n-1] == 0 & (substr(arloc,
+>  1, 2) == "GE" | substr(arloc, 1, 2) == "GM" | substr(arloc, 1, 2) == "IT")
+
+.         
+.         gen abroad_abroad = abroad == 1 & abroad[_n-1] == 1 & training[_n-1] == 0
+
+.         
+.         summ time_since_move_not if abroad_abroad == 1, de
+
+                     time_since_move_not
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%          181             28
+ 5%          183             28
+10%          212             28       Obs              23,057
+25%          304             31       Sum of Wgt.      23,057
+
+50%          427                      Mean           540.6306
+                        Largest       Std. Dev.      322.8262
+75%          730           1764
+90%         1035           1764       Variance       104216.8
+95%         1216           1795       Skewness       1.139115
+99%         1522           1796       Kurtosis       3.798293
+
+.         summ time_since_move_not if abroad_conus == 1, de
+
+                     time_since_move_not
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%          212            181
+ 5%          303            181
+10%          335            181       Obs             131,918
+25%          366            181       Sum of Wgt.     131,918
+
+50%          457                      Mean           622.6333
+                        Largest       Std. Dev.      319.4824
+75%          791           1795
+90%         1126           1796       Variance         102069
+95%         1247           1796       Skewness       .9622279
+99%         1520           1796       Kurtosis        3.05449
+
+.         
+.         *** saving a file to then re-randomize the moves in another do file
+.         preserve
+
+.         gen floor_tenure = floor((filedt_s - startdate)/30)
+(7,501 missing values generated)
+
+.         bys id: egen temp_age = min(age)
+(7,501 missing values generated)
+
+.         gen entry_age = floor(temp_age)
+(7,501 missing values generated)
+
+.         drop temp_age
+
+.         keep if figure_sample == 1 
+(3,838,134 observations deleted)
+
+.         keep id move_not filedt_s min_date_move firstdate lastdate date_marr entry_age age floor_
+> tenure filedt_s startdate
+
+.         save  $datadir/figre_sample_fake_1, replace
+file XXX/dta/figre_sample_fake_1.dta s
+> aved
+
+.         restore
+
+.         
+. *** creating another sample of movers where there is a longer pre-lag and a shorter post lag
+.         
+.         * 1) just first moves
+.         gen figure_sample2 = 1 if move_not == 1 & filedt_s == min_date_move
+(3,609,983 missing values generated)
+
+.         
+.         * 2) in military for at least 2 years before first move
+.         replace figure_sample2 = 0 if min_date_move < firstdate + 730
+(811,810 real changes made)
+
+.         
+.         *3) in military for at least 6 months after first move
+.         replace figure_sample2 = 0 if lastdate - min_date_move < 180
+(461,055 real changes made)
+
+.         
+.         *4) do not move for at least 6 months after first move
+.         sort id move_not filedt_s
+
+.         replace figure_sample2 = 0 if filedt_s[_n+1] - filedt_s < 180 & move_not == 1 & move_not[
+> _n+1] == 1 & id == id[_n+1]
+(362 real changes made)
+
+.         
+.         *5) not married 2 years before first move
+.         replace figure_sample2 = 0 if date_marr - filedt_s < -730
+(399,493 real changes made)
+
+.         replace figure_sample2 = 0 if m_ent == 1
+(256,622 real changes made)
+
+.         
+.         *** creating an alternate sample for figure 1 that fits the restrictions below
+.         gen figure_sample_alt = figure_sample
+(1,353,131 missing values generated)
+
+. 
+.         bys id: egen ever_figure_sample = max(figure_sample)
+(368,217 missing values generated)
+
+.         bys id: egen ever_figure_sample2 = max(figure_sample2)
+(486,617 missing values generated)
+
+.         
+.         *** saving another file to then re-randomize the moves in another do file
+.         preserve
+
+.         gen floor_tenure = floor((filedt_s - startdate)/30)
+(7,501 missing values generated)
+
+.         bys id: egen temp_age = min(age)
+(7,501 missing values generated)
+
+.         gen entry_age = floor(temp_age)
+(7,501 missing values generated)
+
+.         drop temp_age
+
+. 
+.         keep if figure_sample2 == 1 
+(3,772,251 observations deleted)
+
+.         keep id move_not filedt_s min_date_move firstdate lastdate date_marr entry_age age floor_
+> tenure filedt_s startdate
+
+.         save  $datadir/figre_sample_fake_2, replace
+file XXX/dta/figre_sample_fake_2.dta s
+> aved
+
+.         restore 
+
+.         
+. *** Create a sample of people that can be used as a comparison.
+.         * 1) create sample -- had been in the army for at least six months -- a date for each per
+> son that occurs at the average time and age for people
+. 
+.         gen figure_sample_nomove = filedt_s == firstdate
+
+.         
+.         * 2) look similar to figure_sample (balance on age and time since enter // and other char
+> acteristics)
+.         gen tenure = filedt_s - startdate
+(7,501 missing values generated)
+
+.         summ age tenure female ged hsd hsg asc_smc college_pl female afqsc black hispanic other_r
+> ace sum_combat if figure_sample == 1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         age |     54,557    22.43417    3.022576   18.04931    51.8137
+      tenure |     54,604    660.9838    200.5696        181       1068
+      female |     54,599     .159252    .3659143          0          1
+         ged |     54,316    .0719493    .2584064          0          1
+         hsd |     54,316    .0053759    .0731242          0          1
+-------------+---------------------------------------------------------
+         hsg |     54,316    .8412991    .3654003          0          1
+     asc_smc |     54,316    .0608292     .239019          0          1
+  college_pl |     54,316    .0205464    .1418614          0          1
+      female |     54,599     .159252    .3659143          0          1
+       afqsc |     53,814    58.67629    18.24822          1         99
+-------------+---------------------------------------------------------
+       black |     54,604    .2629478    .4402383          0          1
+    hispanic |     54,604    .0917149    .2886257          0          1
+  other_race |     54,604    .0651417    .2467781          0          1
+  sum_combat |     54,604    1.385851    3.692495          0         25
+
+.         summ tenure if figure_sample == 1, de
+
+                           tenure
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%          183            181
+ 5%          304            181
+10%          426            181       Obs              54,604
+25%          546            181       Sum of Wgt.      54,604
+
+50%          639                      Mean           660.9838
+                        Largest       Std. Dev.      200.5696
+75%          822           1068
+90%          943           1068       Variance       40228.14
+95%          976           1068       Skewness      -.0671783
+99%         1064           1068       Kurtosis       2.608012
+
+.                 gen figure_nomove_date = firstdate + r(mean)
+(7,501 missing values generated)
+
+.                 replace figure_sample_alt = 0 if tenure < r(mean) - 365 | tenure > r(mean) + 365
+(921,812 real changes made)
+
+. 
+.         gen temp_age =  (figure_nomove_date - birthmo)/365
+(10,139 missing values generated)
+
+.         summ age if figure_sample == 1, de
+
+                             age
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     18.93151       18.04931
+ 5%     19.54795       18.06575
+10%      19.8548       18.09863       Obs              54,557
+25%     20.47671       18.11233       Sum of Wgt.      54,557
+
+50%     21.52055                      Mean           22.43417
+                        Largest       Std. Dev.      3.022576
+75%     23.36986        46.3863
+90%     26.18082       47.36164       Variance       9.135966
+95%     28.52603       48.99178       Skewness       2.149237
+99%     34.12055        51.8137       Kurtosis       9.459619
+
+.                 replace figure_sample_nomove = 0 if temp_age < r(mean) - 1 | temp_age > r(mean) +
+>  1
+(291,433 real changes made)
+
+.                 replace figure_sample_alt = 0 if age < r(mean) - 1 | age > r(mean) + 1
+(356,633 real changes made)
+
+.         summ age tenure female ged hsd hsg asc_smc college_pl female afqsc black hispanic other_r
+> ace sum_combat if figure_sample_nomove == 1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         age |     94,438    20.49505    .5732246   19.62466   21.62192
+      tenure |     94,438    .0209555    2.307712          0        365
+      female |     94,406    .1296422    .3359111          0          1
+         ged |     92,366    .1083191    .3107847          0          1
+         hsd |     92,366    .0090834    .0948737          0          1
+-------------+---------------------------------------------------------
+         hsg |     92,366    .8229868    .3816819          0          1
+     asc_smc |     92,366    .0588961    .2354315          0          1
+  college_pl |     92,366    .0007145    .0267216          0          1
+      female |     94,406    .1296422    .3359111          0          1
+       afqsc |     93,454    57.79757    19.01584          2         99
+-------------+---------------------------------------------------------
+       black |     94,438    .2397975    .4269621          0          1
+    hispanic |     94,438    .1115441    .3148064          0          1
+  other_race |     94,438    .0510176    .2200348          0          1
+  sum_combat |     94,438    .0004659    .0450875          0          8
+
+. 
+.         replace figure_sample_nomove = 0 if figure_nomove_date < firstdate + 180        
+(0 real changes made)
+
+. 
+. 
+. *3) do not move for at least 2 years after filedt_s
+.         sort id  filedt_s
+
+.         replace figure_sample_nomove = 0 if min_date_move - figure_nomove_date < 730 & min_date_m
+> ove ~= .
+(56,331 real changes made)
+
+.         
+. *4) not married 6 months before first move
+.         replace figure_sample_nomove = 0 if date_marr - figure_nomove_date < -180
+(10,308 real changes made)
+
+.         replace figure_sample_nomove = 0 if m_ent == 1
+(0 real changes made)
+
+. 
+. *5) in military for at least 2 years after filedt_s
+.         replace figure_sample_nomove = 0 if lastdate - figure_nomove_date < 730
+(0 real changes made)
+
+. 
+.         forvalues x=1/24 {
+  2.         gen t_neg`x' = 0 if figure_sample == 1 | figure_sample_nomove == 1 | figure_sample_alt
+>  == 1
+  3.         gen t2_neg`x' = 0 if figure_sample2 == 1
+  4.         
+.         gen t_kids_neg`x' = 0 if figure_sample == 1 | figure_sample_nomove == 1 | figure_sample_a
+> lt == 1
+  5.         gen t_div_neg`x' = 0 if m_ent == 1 | figure_sample2 == 1
+  6.         }
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,028,334 missing values generated)
+
+.         forvalues x=0/25 {
+  2.         gen t_pos`x' = 0 if figure_sample == 1 | figure_sample_nomove == 1 | figure_sample_alt
+>  == 1 
+  3.         gen t2_pos`x' = 0 if figure_sample2 == 1 
+  4.         
+.         gen t_kids_pos`x' = 0 if figure_sample == 1 | figure_sample_nomove == 1 | figure_sample_a
+> lt == 1 
+  5.         gen t_div_pos`x' = 0 if m_ent == 1 
+  6.         }
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+(3,810,335 missing values generated)
+(3,772,251 missing values generated)
+(3,810,335 missing values generated)
+(3,148,821 missing values generated)
+
+.         
+.         *** 1 if married at each of these month intervals, 0 if not married at each of these mont
+> h intervals
+.         
+.         forvalues x=1/24 {
+  2.         local y = `x' -1
+  3.         local z = `y' * 30
+  4.         replace t_neg`x' = 1 if (figure_sample == 1 | figure_sample_alt == 1) & date_marr - fi
+> ledt_s < -`z' & date_marr ~= .
+  5.         replace t2_neg`x' = 1 if (figure_sample2 == 1 | figure_sample_alt == 1) & date_marr - 
+> filedt_s < -`z' & date_marr ~= .
+  6.         
+.         replace t_neg`x' = 1 if (figure_sample_nomove == 1) & date_marr - figure_nomove_date < -`
+> z' & date_marr ~= .
+  7. 
+.         
+.         }
+(4,016 real changes made)
+(32,749 real changes made)
+(1,840 real changes made)
+(3,647 real changes made)
+(31,663 real changes made)
+(1,534 real changes made)
+(2,997 real changes made)
+(29,926 real changes made)
+(1,221 real changes made)
+(2,190 real changes made)
+(27,766 real changes made)
+(924 real changes made)
+(1,399 real changes made)
+(25,669 real changes made)
+(613 real changes made)
+(680 real changes made)
+(23,843 real changes made)
+(288 real changes made)
+(0 real changes made)
+(22,095 real changes made)
+(0 real changes made)
+(0 real changes made)
+(20,450 real changes made)
+(0 real changes made)
+(0 real changes made)
+(18,942 real changes made)
+(0 real changes made)
+(0 real changes made)
+(17,544 real changes made)
+(0 real changes made)
+(0 real changes made)
+(16,168 real changes made)
+(0 real changes made)
+(0 real changes made)
+(14,929 real changes made)
+(0 real changes made)
+(0 real changes made)
+(13,773 real changes made)
+(0 real changes made)
+(0 real changes made)
+(12,665 real changes made)
+(0 real changes made)
+(0 real changes made)
+(11,630 real changes made)
+(0 real changes made)
+(0 real changes made)
+(10,594 real changes made)
+(0 real changes made)
+(0 real changes made)
+(9,580 real changes made)
+(0 real changes made)
+(0 real changes made)
+(8,438 real changes made)
+(0 real changes made)
+(0 real changes made)
+(7,294 real changes made)
+(0 real changes made)
+(0 real changes made)
+(6,153 real changes made)
+(0 real changes made)
+(0 real changes made)
+(5,024 real changes made)
+(0 real changes made)
+(0 real changes made)
+(3,867 real changes made)
+(0 real changes made)
+(0 real changes made)
+(2,733 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1,624 real changes made)
+(0 real changes made)
+
+.         
+.         forvalues x=1/26 {
+  2.         local y = `x' - 1
+  3.         local z = `y' * 30
+  4.         replace t_pos`y' = 1 if (figure_sample == 1 | figure_sample_alt == 1 | figure_sample2 
+> == 1) & date_marr - filedt_s < `z' & date_marr ~= .
+  5.         replace t2_pos`y' = 1 if (figure_sample2 == 1) & date_marr - filedt_s < `z' & date_mar
+> r ~= .
+  6. 
+.         replace t_pos`y' = 1 if (figure_sample_nomove == 1) & date_marr - figure_nomove_date < `z
+> ' & date_marr ~= .
+  7. 
+. 
+.         }
+(34,334 real changes made)
+(32,238 real changes made)
+(1,840 real changes made)
+(41,881 real changes made)
+(38,366 real changes made)
+(2,141 real changes made)
+(43,877 real changes made)
+(39,936 real changes made)
+(2,479 real changes made)
+(45,047 real changes made)
+(40,810 real changes made)
+(2,806 real changes made)
+(46,151 real changes made)
+(41,625 real changes made)
+(3,126 real changes made)
+(47,341 real changes made)
+(42,522 real changes made)
+(3,473 real changes made)
+(48,470 real changes made)
+(43,399 real changes made)
+(3,837 real changes made)
+(49,744 real changes made)
+(44,366 real changes made)
+(4,165 real changes made)
+(51,014 real changes made)
+(45,323 real changes made)
+(4,505 real changes made)
+(52,357 real changes made)
+(46,360 real changes made)
+(4,880 real changes made)
+(53,719 real changes made)
+(47,387 real changes made)
+(5,211 real changes made)
+(55,088 real changes made)
+(48,411 real changes made)
+(5,532 real changes made)
+(56,539 real changes made)
+(49,510 real changes made)
+(5,873 real changes made)
+(58,057 real changes made)
+(50,697 real changes made)
+(6,202 real changes made)
+(59,526 real changes made)
+(51,849 real changes made)
+(6,547 real changes made)
+(60,863 real changes made)
+(52,852 real changes made)
+(6,910 real changes made)
+(62,167 real changes made)
+(53,843 real changes made)
+(7,249 real changes made)
+(63,426 real changes made)
+(54,774 real changes made)
+(7,592 real changes made)
+(64,679 real changes made)
+(55,688 real changes made)
+(7,908 real changes made)
+(65,911 real changes made)
+(56,580 real changes made)
+(8,258 real changes made)
+(67,204 real changes made)
+(57,499 real changes made)
+(8,575 real changes made)
+(68,462 real changes made)
+(58,377 real changes made)
+(8,899 real changes made)
+(69,747 real changes made)
+(59,262 real changes made)
+(9,259 real changes made)
+(71,043 real changes made)
+(60,144 real changes made)
+(9,594 real changes made)
+(72,254 real changes made)
+(60,978 real changes made)
+(9,944 real changes made)
+(73,573 real changes made)
+(61,869 real changes made)
+(10,329 real changes made)
+
+.         
+.         *** 1 if have kids at each of these month intervals, 0 if no kids at each of these month 
+> intervals
+.         
+.         forvalues x=1/7 {
+  2.         local y = `x' -1
+  3.         local z = `y' * 30
+  4.         replace t_kids_neg`x' = 1 if (figure_sample == 1 | figure_sample2 == 1) & date_first_k
+> ids - filedt_s < -`z' & date_first_kids ~= .
+  5.         }
+(16,929 real changes made)
+(16,419 real changes made)
+(15,544 real changes made)
+(14,444 real changes made)
+(13,411 real changes made)
+(12,548 real changes made)
+(11,742 real changes made)
+
+.         
+.         forvalues x=1/26 {
+  2.         local y = `x' - 1
+  3.         local z = `y' * 30
+  4.         replace t_kids_pos`y' = 1 if (figure_sample == 1 | figure_sample2 == 1) & date_first_k
+> ids - filedt_s < `z' & date_first_kids ~= .
+  5.         }
+(16,929 real changes made)
+(19,893 real changes made)
+(21,042 real changes made)
+(21,781 real changes made)
+(22,505 real changes made)
+(23,289 real changes made)
+(24,111 real changes made)
+(25,038 real changes made)
+(25,886 real changes made)
+(26,696 real changes made)
+(27,661 real changes made)
+(28,592 real changes made)
+(29,587 real changes made)
+(30,662 real changes made)
+(31,710 real changes made)
+(32,700 real changes made)
+(33,659 real changes made)
+(34,631 real changes made)
+(35,547 real changes made)
+(36,517 real changes made)
+(37,498 real changes made)
+(38,493 real changes made)
+(39,555 real changes made)
+(40,588 real changes made)
+(41,547 real changes made)
+(42,620 real changes made)
+
+.         
+.         save $datadir/data_for_graph_miles, replace
+file XXX/dta/data_for_graph_miles.dta 
+> saved
+
+.         
+. ***** Figure 1 is now created in jhr_fig_1.do
+. 
+. save $datadir/figs_3a_3b, replace
+file XXX/dta/figs_3a_3b.dta saved
+
+. *** Figures 3A and 3B in jhr_figs_3a_3b.do
+. 
+. *** dual spouse
+.         gen dualspouse = spouse_id ~= .
+
+.         replace married = 1 if dualspouse == 1
+(4,206 real changes made)
+
+.         dis "summarizing dualspouse"
+summarizing dualspouse
+
+.         summ dualspouse
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  dualspouse |  3,892,738    .0387856    .1930835          0          1
+
+.         
+. 
+. 
+. *** deployment variables
+.         gen temp = sum_combat >0 & sum_combat ~= .  
+
+.         bys id: egen everdepl = max(temp)
+
+.         
+.         
+. *** moves pre and post deployment
+. 
+.         gen pre_move_not = move_not if filedt_s < min_combat_filedt_s
+(965,481 missing values generated)
+
+.         gen post_move_not = move_not if filedt_s > min_combat_filedt_s
+(2,963,614 missing values generated)
+
+.         
+. *** married 3 months before first deployment
+. 
+.         gen diff_marr_combat = min_combat_filedt_s - date_marr
+(1,413,865 missing values generated)
+
+.         gen marr_3mo_1deploy = (diff_marr_combat > 0 & diff_marr_combat <= 92 & diff_marr_combat 
+> ~= .)
+
+.         replace marr_3mo_1deploy = . if evermarr == 0
+(1,493,629 real changes made, 1,493,629 to missing)
+
+. 
+. *** date of first non-training move
+. 
+.         bys id move_not: egen temp_move = min(filedt_s)
+(7,501 missing values generated)
+
+.         replace temp_move = . if move_not == 0
+(3,485,607 real changes made, 3,485,607 to missing)
+
+.         bys id: egen first_move_dt_s = min(temp_move)
+(803,906 missing values generated)
+
+.                 
+. 
+.         dis "count number of people in sample, check 0"
+count number of people in sample, check 0
+
+.         count if num_id_check == 1
+  378,370
+
+. 
+. 
+.         
+. *** people who were ever in a dual relationship
+.         bys id: egen everdual = max(dualspouse)
+
+.         replace evermarr = 1 if everdual == 1
+(8,206 real changes made)
+
+.         gen ndual = 1 if everdual == 0
+(454,736 missing values generated)
+
+.         replace ndual = 0 if everdual == 1
+(454,736 real changes made)
+
+. 
+. *** for people who were ever abroad, don't include them in the epop / cell share data
+.         replace avg_epop = . if everabroad == 1
+(859,890 real changes made, 859,890 to missing)
+
+.         
+.         replace avg_cellshare = . if everabroad == 1
+(886,301 real changes made, 886,301 to missing)
+
+. 
+. 
+. *** creating year, job, rank interaction variables
+.         bys initial_rank pmos initial_year: gen exper_br_year_flag=1 if _n==1
+(3,877,036 missing values generated)
+
+.         replace exper_br_year_flag=0 if exper_br_year_flag==.
+(3,877,036 real changes made)
+
+.         gen exper_br_year_fe=sum(exper_br_year_flag)
+
+.         drop exper_br_year_flag
+
+.         
+. *** creating year, job, rank, gender interaction variables
+.         bys initial_rank pmos initial_year sex: gen exper_br_year_flag_s=1 if _n==1
+(3,868,259 missing values generated)
+
+.         replace exper_br_year_flag_s=0 if exper_br_year_flag_s==.
+(3,868,259 real changes made)
+
+.         gen exper_br_year_sex_fe=sum(exper_br_year_flag_s)
+
+.         drop exper_br_year_flag_s
+
+. 
+.         
+. *****************************************************
+. ** Creating a number of right hand side variables
+. *****************************************************
+. 
+. ** move_yr - did you move in a particular year? 
+.         bys id: egen totmoves  = total(move)
+
+. *** non-training moves
+.         bys id: egen totmoves_not = total(move_not)
+
+.         replace move_not = 0 if last_not == 1 & distance_move_not == 0
+(6,440 real changes made)
+
+.         replace distance_move_not = 0 if move_not ~= 1
+(1,373,666 real changes made)
+
+.         bys id: egen tot_dist_not = total(distance_move_not)
+
+.         replace tot_dist_not = . if everabroad == 1
+(2,196,528 real changes made, 2,196,528 to missing)
+
+.         
+. *** total moves pre-deployment and post deployment
+.         bys id: egen pre_totmoves_not = total(pre_move_not)
+
+.         bys id: egen post_totmoves_not = total(post_move_not)
+
+.         
+.         
+. *** total worse moves
+.         bys id: egen tot_worse_not = max(worse_location)
+(2,567,407 missing values generated)
+
+.         bys id: egen tot_better_not = max(better_location)      
+(2,567,407 missing values generated)
+
+.         bys id: egen tot_worse_epop = max(worse_epop)
+(2,574,551 missing values generated)
+
+.         bys id: egen tot_better_epop = max(better_epop) 
+(2,574,551 missing values generated)
+
+.         bys id: egen tot_figure_sample = max(figure_sample)
+(368,217 missing values generated)
+
+.         bys id: egen tot_conus_abroad = max(conus_abroad)
+
+.         bys id: egen tot_abroad_conus = max(abroad_conus)
+
+.         bys id: egen tot_abroad_abroad = max(abroad_abroad)
+
+.         bys id: egen tot_worse_amm = max(worse_amm)
+(2,854,874 missing values generated)
+
+.         bys id: egen tot_better_amm = max(better_amm)   
+(2,854,874 missing values generated)
+
+.         bys id: egen tot_more_exp_rent = max(more_exp_rent)
+(2,553,897 missing values generated)
+
+.         bys id: egen tot_less_exp_rent = max(less_exp_rent)
+(2,553,897 missing values generated)
+
+.         
+. 
+. 
+. *** changing the totmoves to only include non-abroad moves --- just for Germandy and Italy where 
+> it is most likely to be accomanied.  
+. 
+.         gen abroad_move = 0 if move_not == 1 & conus == 1
+(3,623,538 missing values generated)
+
+.         sort id move_not
+
+.         replace abroad_move = 1 if move_not == 1 & conus == 0 & (substr(arloc, 1, 2) == "GE" | su
+> bstr(arloc, 1, 2) == "GM" | substr(arloc, 1, 2) == "IT") & conus[_n-1] == 1 & id == id[_n-1]
+(40,709 real changes made)
+
+.         replace abroad_move = 1 if move_not == 1 & conus == 1 & (substr(arloc[_n-1], 1, 2) == "GE
+> " | substr(arloc[_n-1], 1, 2) == "GM" | substr(arloc[_n-1], 1, 2) == "IT") & id == id[_n-1]
+(37,034 real changes made)
+
+.         
+.         gen abroad_move_c_o = 0 if move_not == 1
+(3,499,548 missing values generated)
+
+.         replace abroad_move_c_o = 1 if move_not == 1 & conus == 0 & (substr(arloc, 1, 2) == "GE" 
+> | substr(arloc, 1, 2) == "GM" | substr(arloc, 1, 2) == "IT") & conus[_n-1] == 1 & id == id[_n-1]
+(40,709 real changes made)
+
+.         
+.         gen abroad_move_o_c = 0 if move_not == 1
+(3,499,548 missing values generated)
+
+.         replace abroad_move_o_c = 1 if move_not == 1 & conus == 1 & (substr(arloc[_n-1], 1, 2) ==
+>  "GE" | substr(arloc[_n-1], 1, 2) == "GM" | substr(arloc[_n-1], 1, 2) == "IT") & id == id[_n-1]
+(37,034 real changes made)
+
+.         
+.         gen abroad_to_abroad_move = 0 if move_not == 1
+(3,499,548 missing values generated)
+
+.         replace abroad_to_abroad_move = 1 if move_not == 1 & (substr(arloc, 1, 2) == "GE" | subst
+> r(arloc, 1, 2) == "GM" | substr(arloc, 1, 2) == "IT")  & (substr(arloc[_n-1], 1, 2) == "GE" | sub
+> str(arloc[_n-1], 1, 2) == "GM" | substr(arloc[_n-1], 1, 2) == "IT") & id == id[_n-1]
+(18,483 real changes made)
+
+.         
+.         gen move_not_us = move_not
+(7,501 missing values generated)
+
+.         replace move_not_us = 0 if abroad_move == 1 | (conus == 0 & move_not == 1)      
+(161,024 real changes made)
+
+.         bys id: egen totmoves_not_us = total(move_not_us)       
+
+.         ren totmoves_not totmoves_not_w_abroad
+
+.         bys id: egen abroad_moves_not = total(abroad_move)
+
+.         gen totmoves_not = totmoves_not_us
+
+.         
+.         bys id: egen abroad_moves_not_c_o = total(abroad_move_c_o)
+
+.         bys id: egen abroad_moves_not_o_c = total(abroad_move_o_c)
+
+.         bys id: egen abroad_to_abroad_moves = total(abroad_to_abroad_move)
+
+. 
+.         ** could be domestic moves within us or within italy/germany
+.         label var totmoves_not "Domestic Moves"
+
+. 
+. *       histogram time_since_move if move == 1, percent
+. *       graph export $figdir/time_since_move.ps, replace
+. 
+. ** total time spent in training
+.         sort id filedt_s
+
+.         gen time_in_training = filedt_s - filedt_s[_n-1] if training == 1 & id == id[_n-1] & file
+> dt_s > filedt_s[_n-1]
+(2,965,708 missing values generated)
+
+.         bys id: egen min_train = min(filedt_s)
+(7,501 missing values generated)
+
+.         gen mintrain = (filedt_s == min_train & training == 1)
+
+.         replace time_in_training = filedt_s - startdate if mintrain == 1
+(355,094 real changes made)
+
+.         bys id: egen tot_time_t = total(time_in_training)
+
+.         drop min_train mintrain
+
+. 
+. ** time overseas - NEED TO CORRECT FOR OTHER PLACES WHERE FAMILY DOES NOT MOVE (BESIDES KOREA)
+.         sort id training conus filedt_s
+
+.         gen temp_overseas = filedt_s - filedt_s[_n-1] if conus[_n-1] == 0 & id == id[_n-1] & cnty
+> [_n-1] ~= "KS" & training == 0 & filedt_s > filedt_s[_n-1]
+(3,504,073 missing values generated)
+
+.         bys id: egen time_overseas = total(temp_overseas)
+
+.         drop temp_overseas
+
+. 
+. 
+. *** urban versus rural
+.         gen rural = msa == .
+
+.         replace rural = . if zipcd == "" 
+(107,575 real changes made, 107,575 to missing)
+
+.         replace rural = . if conus == 0
+(784,378 real changes made, 784,378 to missing)
+
+.         sort id training rural filedt_s
+
+.         gen temp_rural = filedt_s - filedt_s[_n-1] if rural[_n-1] == 1 & id == id[_n-1] & conus[_
+> n-1] == 1 & training == 0 & filedt_s > filedt_s[_n-1]
+(3,553,264 missing values generated)
+
+.         bys id: egen time_rural = total(temp_rural)
+
+.         drop temp_rural
+
+. 
+. *** time not in region 
+.         gen inhomeregion = region == regionhor
+
+.         sort id training inhomeregion filedt_s
+
+.         gen temp_region = filedt_s - filedt_s[_n-1] if inhomeregion[_n-1] == 0 & id == id[_n-1] &
+>  training == 0 & filedt_s > filedt_s[_n-1]
+(2,339,636 missing values generated)
+
+.         replace temp_region = 0 if inhomeregion[_n-1] == 1 & id == id[_n-1] & training == 0
+(608,653 real changes made)
+
+.         bys id: egen time_notreg = total(temp_region)
+
+.         bys id: egen ever_home = min(temp_region)
+(7,501 missing values generated)
+
+.         replace ever_home = 1 if ever_home > 0
+(2,103,660 real changes made)
+
+.         replace time_notreg = . if regionhor == ""
+(207,148 real changes made, 207,148 to missing)
+
+.         drop temp_region
+
+.         
+.         drop ever_home
+
+.         gen temp_ever_home = inhomeregion == 1 & training == 0
+
+.         bys id: egen ever_home = max(temp_ever_home)
+
+.         
+. *** ever in home division
+.         gen inhomedivision = division == divisionhor & training == 0
+
+.         bys id: egen ever_hom_division = max(inhomedivision)
+
+. 
+.         sort id training inhomedivision filedt_s
+
+.         gen temp_div = filedt_s - filedt_s[_n-1] if inhomedivision[_n-1] == 0 & id == id[_n-1] & 
+> training == 0 & filedt_s > filedt_s[_n-1]
+(2,013,013 missing values generated)
+
+.         replace temp_div = 0 if inhomedivision[_n-1] == 1 & id == id[_n-1] & training == 0
+(307,750 real changes made)
+
+.         bys id: egen time_notdiv = total(temp_div)
+
+.         replace time_notdiv = . if divisionhor == ""
+(225,170 real changes made, 225,170 to missing)
+
+.         
+. *** ever in home state
+.         gen inhomestate = state == statehor & training == 0
+
+.         bys id: egen ever_hom_state = max(inhomestate)
+
+. 
+. ** number of years with a move
+.         bys id year: egen move_in_year = max(move_not)
+(7,501 missing values generated)
+
+.         bys id year: gen num_temp = sum(move_in_year)
+
+.         gen temp3 = (move_in_year == 1 & num_temp == 1)
+
+.         bys id: egen tot_year_move = total(temp3)
+
+.         drop move_in_year num_temp temp3
+
+. 
+. 
+. ** moves in the last five years
+.         bys id: egen lastobs2 = max(filedt_s)
+(7,501 missing values generated)
+
+.         gen temp5 = lastobs2 - 1826
+(7,501 missing values generated)
+
+.         gen last5 = (filedt_s >= temp5)
+
+.         gen tempmove = (move_not == 1 & last5 == 1)
+
+.         bys id: egen moves_5years = total(tempmove)
+
+.         bys id: egen max_yos = max(yos)
+(7,501 missing values generated)
+
+.         replace moves_5years = . if max_yos < 4
+(0 real changes made)
+
+.         drop max_yos
+
+.         drop  temp5 last5 tempmove
+
+. 
+. *** move in the last year
+. 
+.         gen temp1 = lastobs2 - 365
+(7,501 missing values generated)
+
+.         gen last1 = (filedt_s >= temp1)
+
+.         gen tempmove = (move_not == 1 & last1 == 1)
+
+.         bys id: egen moves_1year = total(tempmove)
+
+.         drop lastobs2 temp1 last1 tempmove
+
+. 
+.         foreach var in msa region division {
+  2.         bys id `var': gen num_`var' = _n
+  3.         gen temp`var' = num_`var' == 1
+  4.         bys id: egen tot`var' = total(temp`var')
+  5.         drop temp`var' num_`var'
+  6.         }
+
+. 
+. dis "count number of people in sample, check 2"
+count number of people in sample, check 2
+
+. count if num_id_check == 1
+  378,370
+
+. drop lastdate
+
+. bys id: egen lastdate = max(filedt_s)
+(7,501 missing values generated)
+
+. 
+.         /* creating a file to check some of the data */
+.         egen newid = group(id)
+(7,501 missing values generated)
+
+.         sort newid filedt_s
+
+. 
+. *** number of kids
+.         gen nbr_kids = nrdep - 1 if married == 1 & dualspouse ~= 1
+(2,638,150 missing values generated)
+
+.         replace nbr_kids = nrdep if married == 0 | dualspouse == 1      
+(2,617,863 real changes made)
+
+.         replace nbr_kids = nrdep if married == 0 & dualspouse == .
+(0 real changes made)
+
+.         
+.         bys id: egen temp_kids = max(nbr_kids)
+(7,729 missing values generated)
+
+.         drop nbr_kids
+
+.         ren temp_kids nbr_kids
+
+. 
+. ******
+. ** keeping one observation
+. ******
+.         bys id: egen max = max(filedt_s)
+(7,501 missing values generated)
+
+.         keep if filedt_s == max
+(3,506,867 observations deleted)
+
+. 
+. 
+. ** some people are missing their marriage indicator for the last observation.  replacing with dee
+> rs data in that case
+.         replace married = 1 if married == . & spouse_deers == 1
+(207 real changes made)
+
+.         replace married = 0 if married == . & spouse_deers == 0
+(235 real changes made)
+
+.         
+. 
+. 
+. *** moves per year variables
+.         gen tot_mov_nt_yr = totmoves_not / `yos'
+
+.         gen tot_moves_yr = totmoves / `yos'
+
+.         gen tot_msa_yr = totmsa / `yos'
+
+.         gen tot_region_yr = totregion/ `yos'
+
+.         gen tot_division_yr = totdivision / `yos'
+
+.         gen tot_lm_yr = totlongmove / `yos'
+(7,501 missing values generated)
+
+.         gen tot_sm_yr = totshortmove / `yos'
+(7,501 missing values generated)
+
+.         set emptycells drop, permanently
+(set emptycells preference recorded)
+
+. 
+. 
+. ** regressing their time in service before first move 
+.         eststo clear
+
+. 
+.         ren tot_division_yr tot_div_yr
+
+. 
+.         dis "count number of people in sample, check 3"
+count number of people in sample, check 3
+
+.         count if num_id_check == 1
+  0
+
+. 
+.         gen w_m = female == 0 & white == 1
+
+.         foreach var in longestmove time_overseas time_1_2 mean_last2 time_notreg time_rural {
+  2.         gen temp2 = `var' /365.25
+  3.         drop `var'
+  4.         ren temp2 `var'
+  5.         }
+(15,611 missing values generated)
+(89,196 missing values generated)
+(15,611 missing values generated)
+(26,546 missing values generated)
+
+. 
+.         foreach var in  totpop {
+  2.         gen temp2 = `var' / 100000
+  3.         drop `var'
+  4.         ren temp2 `var'
+  5.         }
+(82,015 missing values generated)
+
+.         foreach var in 5 {
+  2.         if `to_`var'' {
+  3.         gen re_enlist_10 = maxyos >= 10
+  4.         }
+  5.         }
+
+. 
+. 
+. 
+.         gen male = sex == "M" if sex ~= ""
+(7,502 missing values generated)
+
+. 
+. 
+. 
+. *** creating indicators for 1, 2, 3 moves, etc.  will use in the regressions
+.         gen one_move = totmoves_not == 1
+
+.         gen zero_one_move = totmoves_not_w_abroad <= 1
+
+.         gen two_move = totmoves_not == 2
+
+.         gen zero_two_move = totmoves_not_w_abroad <= 2
+
+.         gen three_move = totmoves_not == 3
+
+.         gen zero_three_move = totmoves_not_w_abroad <= 3
+
+.         gen any_move = totmoves_not > 0 if totmoves_not ~= .
+
+.         gen any_move_intl = totmoves_not_w_abroad > 0 if totmoves_not_w_abroad ~= .
+
+. 
+.         gen one_abroad_move = abroad_moves_not == 1
+
+.         gen two_abroad_move = abroad_moves_not == 2
+
+.         gen three_abroad_move = abroad_moves_not == 3
+
+.         
+.         gen one_abroad_moves_not_c_o = abroad_moves_not_c_o == 1
+
+.         gen two_abroad_moves_not_c_o = abroad_moves_not_c_o == 2
+
+.         gen three_abroad_moves_not_c_o = abroad_moves_not_c_o == 3
+
+. 
+.         gen one_abroad_moves_not_o_c = abroad_moves_not_o_c == 1
+
+.         gen two_abroad_moves_not_o_c = abroad_moves_not_o_c == 2
+
+.         gen three_abroad_moves_not_o_c = abroad_moves_not_o_c == 3      
+
+.         
+.         gen one_abroad_abroad_move = abroad_to_abroad_moves == 1
+
+.         gen two_abroad_abroad_move = abroad_to_abroad_moves == 2
+
+.         gen three_abroad_abroad_move = abroad_to_abroad_moves == 3
+
+.         
+. foreach var in tot_less_exp_rent tot_better_amm tot_better_epop tot_better_not tot_worse_not tot_
+> worse_epop tot_worse_amm tot_more_exp_rent {
+  2. replace `var' = . if one_move ~= 1
+  3. }
+(35,266 real changes made, 35,266 to missing)
+(31,829 real changes made, 31,829 to missing)
+(34,803 real changes made, 34,803 to missing)
+(34,934 real changes made, 34,934 to missing)
+(34,934 real changes made, 34,934 to missing)
+(34,803 real changes made, 34,803 to missing)
+(31,829 real changes made, 31,829 to missing)
+(35,266 real changes made, 35,266 to missing)
+
+.         
+.         gen drop0_totmov = totmoves_not
+
+.         replace drop0_totmov = . if totmoves_not == 0
+(187,612 real changes made, 187,612 to missing)
+
+. 
+. /* creating a normalized version of epop for each of these outcomes below*/
+. 
+. *** creating some sub populations
+.         gen all = 1
+
+.         gen nm_ent = 1 if m_ent == 0
+(73,540 missing values generated)
+
+.         replace nm_ent = 0 if m_ent == 1
+(73,540 real changes made)
+
+. 
+.         gen term5 = terms == "5"
+
+.         
+.         gen max_three = totmoves_not_w_abroad <= 3
+
+.         
+.         gen neverdepl = everdepl == 0
+
+.         gen infantry = branch == "IN"
+
+. 
+. 
+. *** interating home with moves
+.         replace ever_home = . if time_notreg == .
+(26,546 real changes made, 26,546 to missing)
+
+.         summ ever_home
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   ever_home |    359,325    .5059208    .4999656          0          1
+
+. 
+.         gen home_x_tot = ever_home*totmoves_not
+(26,546 missing values generated)
+
+. 
+. *** creating distances in terms of 1,000s       
+.         gen tot_dist_not_old = tot_dist_not
+(192,953 missing values generated)
+
+.         replace tot_dist_not = tot_dist_not_old / 1000
+(95,939 real changes made)
+
+. 
+. *** normalizing avg_epop, time, and distance
+. 
+.                 qui areg re_enlist totmoves_not ged hsd hsg asc_smc college_pl female afqsc black
+>  hispanic other_race sum_combat age age_sq if everabroad == 0, absorb(exper_br_year_fe)          
+>       
+
+. 
+. 
+.                 summ longestmove, de
+
+                         longestmove
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     1.749487       .0848734
+ 5%     2.250513        .495551
+10%     2.505133       .4982888       Obs             370,260
+25%     3.080082       .4982888       Sum of Wgt.     370,260
+
+50%     3.832991                      Mean            4.20584
+                        Largest       Std. Dev.      1.687037
+75%     4.999316       20.75017
+90%     6.335387       20.75017       Variance       2.846093
+95%       7.4141       20.91992       Skewness       1.601406
+99%     9.998631       21.08419       Kurtosis       7.598997
+
+.                 ren longestmove longestmove2
+
+.                 gen longestmove = (longestmove - r(mean))/r(sd)
+(15,611 missing values generated)
+
+.                 gen long_avg = longestmove > 0
+
+. 
+.                 gen long_x_tot = longestmove*totmoves_not
+(15,611 missing values generated)
+
+. 
+.                 summ avg_epop if e(sample) == 1, de
+
+                          avg_epop
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .3322973       .1854919
+ 5%     .3647434       .2217213
+10%     .3810251       .2520448       Obs             161,940
+25%     .4366765       .2839452       Sum of Wgt.     161,940
+
+50%     .4835924                      Mean           .4769212
+                        Largest       Std. Dev.      .0633358
+75%     .5246888       .6238691
+90%     .5545018       .6245306       Variance       .0040114
+95%     .5679604       .6246693       Skewness      -.4344565
+99%     .6000841        .629722       Kurtosis       2.590464
+
+.                 ren avg_epop avg_epop2
+
+.                 gen avg_epop = (avg_epop2 - r(mean))/r(sd)
+(221,381 missing values generated)
+
+.                 gen long_emp = avg_epop > 0
+
+.                 replace long_emp = . if avg_epop == .
+(221,381 real changes made, 221,381 to missing)
+
+.                 gen emp_x_tot = avg_epop*totmoves_not
+(221,381 missing values generated)
+
+.                 
+.                 summ avg_cellshare if e(sample) == 1, de
+
+                        avg_cellshare
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0003651      -.0002691
+ 5%     .0007406      -.0000614
+10%     .0014551      -.0000524       Obs             181,529
+25%     .0092245       .0000208       Sum of Wgt.     181,529
+
+50%     .0253726                      Mean           .0238804
+                        Largest       Std. Dev.      .0156539
+75%     .0366357       .0725837
+90%     .0431491       .0753528       Variance        .000245
+95%      .047176       .0873995       Skewness       .0121378
+99%     .0556883       .0898028       Kurtosis       1.932064
+
+.                 ren avg_cellshare avg_cellshare2
+
+.                 gen avg_cellshare = (avg_cellshare - r(mean))/r(sd)
+(203,045 missing values generated)
+
+.                 
+.                 gen cell_x_tot = avg_cellshare*totmoves_not
+(203,045 missing values generated)
+
+. 
+.                 summ avg_cellpop if e(sample) == 1, de
+
+                         avg_cellpop
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     88.14836      -63.05801
+ 5%     287.6448      -21.62916
+10%     520.5052      -14.92359       Obs             117,171
+25%     2942.208       6.348557       Sum of Wgt.     117,171
+
+50%     5321.728                      Mean           8853.208
+                        Largest       Std. Dev.       12697.1
+75%     10030.33         214063
+90%     17928.37       239901.7       Variance       1.61e+08
+95%     29278.61       245833.6       Skewness         5.4391
+99%     61272.13       255863.5       Kurtosis       51.45476
+
+.                 ren avg_cellpop avg_cellpop2
+
+.                 gen avg_cellpop = (avg_cellpop - r(mean))/r(sd)
+(268,330 missing values generated)
+
+.                 
+.                 foreach var in avg_cell2br avg_cell_amm avg_shcon avg_shman avg_shgov avg_shmil a
+> vg_shsvc {
+  2.                 egen z2`var' = std(`var')
+  3.                 }
+(201,323 missing values generated)
+(233,391 missing values generated)
+(221,576 missing values generated)
+(221,624 missing values generated)
+(221,553 missing values generated)
+(221,553 missing values generated)
+(221,553 missing values generated)
+
+.                 
+.                 
+.                 gen cellpop_x_tot = avg_cellpop*totmoves_not
+(268,330 missing values generated)
+
+.                 
+.                 sum tot_dist_not if e(sample) == 1, de
+
+                        tot_dist_not
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs             182,694
+25%            0              0       Sum of Wgt.     182,694
+
+50%     .1612215                      Mean           .6905291
+                        Largest       Std. Dev.      1.013469
+75%     1.030123       9.604156
+90%     2.019274       10.66001       Variance        1.02712
+95%     2.963264       11.33297       Skewness       2.018528
+99%     3.839683       11.59207       Kurtosis       8.239119
+
+.                 ren tot_dist_not tot_dist_not2
+
+.                 gen tot_dist_not = (tot_dist_not2 - r(mean))/r(sd)
+(192,953 missing values generated)
+
+.                 
+.                 summ tot_dist_not, de
+
+                        tot_dist_not
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     -.681352       -.681352
+ 5%     -.681352       -.681352
+10%     -.681352       -.681352       Obs             192,918
+25%     -.681352       -.681352       Sum of Wgt.     192,918
+
+50%     -.681352                      Mean          -.0266079
+                        Largest       Std. Dev.      .9896237
+75%     .2657203       9.836983
+90%     1.279019       10.06043       Variance        .979355
+95%     2.232284       10.50101       Skewness       2.077827
+99%     3.086484       10.75666       Kurtosis       8.554193
+
+.                 gen tot_dist_not_temp = (tot_dist_not - r(mean))/r(sd)
+(192,953 missing values generated)
+
+.                 
+.                 gen tot_dist_gr_less300 = tot_dist_not_old <= 300 & tot_dist_not_old ~= 0 if tot_
+> dist_not_old ~= . 
+(192,953 missing values generated)
+
+.                 gen tot_dist_gr_300_1000 = tot_dist_not_old > 300 & tot_dist_not_old <= 1000 if t
+> ot_dist_not_old ~= .
+(192,953 missing values generated)
+
+.                 gen tot_dist_gr_1000_2000 = tot_dist_not_old > 1000 & tot_dist_not_old <= 2000 if
+>  tot_dist_not_old ~= .
+(192,953 missing values generated)
+
+.                 gen tot_dist_gr_2000_3000 = tot_dist_not_old > 2000 & tot_dist_not_old <= 3000 if
+>  tot_dist_not_old ~= .
+(192,953 missing values generated)
+
+.                 gen tot_dist_gr_great3000 = tot_dist_not_old > 3000 if tot_dist_not_old ~= .
+(192,953 missing values generated)
+
+. 
+.                 
+.                 gen dist_x_tot = totmoves_not*tot_dist_not
+(192,953 missing values generated)
+
+. 
+. *** labeling variables 
+.                 label var everdissolve "Dissolve Marriage"
+
+.                 label var everkids "Have Children"
+
+.                 label var ged "GED"
+
+.                 label var hsd "High School Dropout"
+
+.                 label var hsg "High School Graduate"
+
+.                 label var term5 "Term Legnth = 5 Years"
+
+.                 label var male "Male"
+
+.                 label var female "Female"
+
+.                 label var nm_ent "Not Married when Enter"
+
+.                 label var m_ent "Married when Enter"
+
+.                 label var mar_lyr "Married in 1st Year"
+
+.                 label var ever_home "Ever in Home Region"
+
+.                 label var home_x_tot "Ever Home x Moves"
+
+.                 label var long_avg "Longer than Average Stay"
+
+.                 label var long_x_tot "Longer x Moves"
+
+.                 label var long_emp "Avg. Employment > Mean"
+
+.                 label var emp_x_tot "Emp x Moves"
+
+.                 label var avg_epop "Average Employment to Pop"
+
+.                 label var longestmove "Longest Spell"
+
+.                 label var time_notreg "Time not in Home Region"
+
+.                 label var tot_dist_not "Total Distance of Moves"
+
+.                 
+.                 gen abroad_notGM_GE_IT = (conus == 0 & (substr(arloc, 1, 2) ~= "GM" & substr(arlo
+> c, 1, 2) ~= "GE" & substr(arloc, 1, 2) ~= "IT"))
+
+.                 bys id: egen ever_abroad_notGM_GE_IT = max(abroad_notGM_GE_IT)
+
+. 
+.                 
+. ********
+. *** dataset for creating all of the tables 
+. ********
+. 
+. save $datadir/jhr_clean_for_tables, replace     
+file XXX/dta/jhr_clean_for_tables.dta 
+> saved
+
+. 
+. /* creating sample to use for Table 8 */
+. 
+.                 qui areg evermarr totmoves_not ged hsd hsg asc_smc college_pl female afqsc black 
+> hispanic other_race sum_combat age age_sq if nm_ent == 1 & everabroad == 0, absorb(exper_br_year_
+> fe)
+
+.                 gen sample_evermarr_us = e(sample)
+
+.                 gen sample_marr_nm_ent_us = e(sample)
+
+.                 dis "summ evermarr by nbr moves, us only"
+summ evermarr by nbr moves, us only
+
+.                 tabstat evermarr if e(sample) == 1, by(totmoves_not) c(stats) stats(mean n)
+
+Summary for variables: evermarr
+     by categories of: totmoves_not (Domestic Moves)
+
+totmoves_not |      mean         N
+-------------+--------------------
+           0 |  .4986717     71143
+           1 |  .6028826     64734
+           2 |  .6481765      7842
+           3 |  .6659708       479
+           4 |  .6981132        53
+           5 |         1         3
+-------------+--------------------
+       Total |   .554203    144254
+----------------------------------
+
+.                 local demos_evermarr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 
+.                 gen marr_nm_ent = married if nm_ent == 1 
+(81,041 missing values generated)
+
+.                 local demos_marr_nm_ent female ged hsd asc_smc college_pl afqsc black hispanic ot
+> her_race sum_combat age age_sq
+
+.                 
+.                 **** saving this sample to use for the Table 8 regressions with five obs per pers
+> on
+.                 preserve
+
+.                 keep if sample_evermarr_us == 1 
+(241,617 observations deleted)
+
+.                 save $datadir/evermarr_us_sample, replace
+file XXX/dta/evermarr_us_sample.dta sa
+> ved
+
+.                 restore
+
+.         
+. 
+end of do-file
+

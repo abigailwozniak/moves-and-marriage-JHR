@@ -1,0 +1,392 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  XXX/jhr_output/app_table_
+> c4.log
+  log type:  text
+ opened on:  17 Mar 2021, 21:14:24
+
+.         global outsheet XXX/jhr_outp
+> ut
+
+. 
+. 
+. use $datadir/jhr_samples_created
+
+. 
+. 
+. 
+. **** taking out combat
+.                 local demos_everdissolve female ged hsd asc_smc college_pl afqsc black hispanic o
+> ther_race sum_combat age age_sq
+
+.                 local demos_everkids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 local demos_nbr_kids female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 local demos_age_marr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat
+
+.                 local demos_evermarr female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race sum_combat age age_sq
+
+.                 local demos_marr_nm_ent female ged hsd asc_smc college_pl afqsc black hispanic ot
+> her_race sum_combat age age_sq
+
+.                 local demos_married female ged hsd asc_smc college_pl afqsc black hispanic other_
+> race sum_combat age age_sq
+
+.                 local demos_re_enlist female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race sum_combat age age_sq
+
+. 
+.                 
+. **** taking out combat
+.                 local demos_everdissolve2 female ged hsd asc_smc college_pl afqsc black hispanic 
+> other_race  age age_sq
+
+.                 local demos_everkids2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_nbr_kids2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_age_marr2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_evermarr2 female ged hsd asc_smc college_pl afqsc black hispanic othe
+> r_race  age age_sq
+
+.                 local demos_married2 female ged hsd asc_smc college_pl afqsc black hispanic other
+> _race  age age_sq
+
+.                 local demos_marr_nm_ent2 female ged hsd asc_smc college_pl afqsc black hispanic o
+> ther_race  age age_sq          
+
+.                 local demos_re_enlist2 female ged hsd asc_smc college_pl afqsc black hispanic oth
+> er_race  age age_sq
+
+. 
+.         gen pre2002 = mind < td(01oct2001) if initial_year ~= .
+(7,501 missing values generated)
+
+.         gen post2001 = mind >= td(01oct2001) if initial_year ~= .               
+(7,501 missing values generated)
+
+.                 
+. *********
+. ** Appendix Table C4
+. *********
+. 
+. *** Col. 1 Main result
+. 
+. foreach var in evermarr {
+  2.         foreach var2 in totmoves_not {
+  3.                         foreach cond in all  {
+  4.                            
+.                         areg `var' `var2' `demos_`var'' if `cond' == 1  & sample_`var'_us == 1, r
+> obust absorb(exper_br_year_sex_fe)
+  5.                         qui summ `var' if e(sample) == 1, de
+  6.                         local mean = r(mean)
+  7.                         qui summ `var2' if e(sample) == 1, de
+  8.                         local mean2 = r(mean)
+  9.                         outreg2  using $outsheet/app_c4.xls, replace label ctitle ("`cond'") t
+> itle("`var'") dec(3) addtex(Mean, `mean', Indep Mean, `mean2') keep(`var2') 
+ 10. 
+. *** Col. 2 any move
+.                         areg `var' any_move `demos_`var'' if `cond' == 1  & sample_`var'_us == 1,
+>  robust absorb(exper_br_year_sex_fe)
+ 11.                         
+.                         qui summ `var' if e(sample) == 1, de
+ 12.                         local mean = r(mean)
+ 13.                         outreg2  using $outsheet/app_c4.xls,  label ctitle ("`cond', us") titl
+> e("`var'") dec(3) addtex(Mean, `mean') keep(any_move)     
+ 14.                         
+.                         
+. *** Col. 3 conditioning on 0 or 1 move
+.                         areg `var' one_move  `demos_`var'' if `cond' == 1  & sample_`var'_us == 1
+>  & zero_one_move == 1, robust absorb(exper_br_year_sex_fe)
+ 15.                         
+.                         qui summ `var' if e(sample) == 1, de
+ 16.                         local mean = r(mean)
+ 17.                         outreg2  using $outsheet/app_c4.xls, label ctitle ("max 1 move") title
+> ("`var'") dec(3) addtex(Mean, `mean', Sample) keep(one_move)                      
+ 18.                         
+. *** Col. 4 conditioning on 3 or fewer moves                      
+.                         areg `var' one_move two_move three_move `demos_`var'' if `cond' == 1  & s
+> ample_`var'_us == 1 & max_three == 1, robust absorb(exper_br_year_sex_fe)
+ 19.                         
+.                         qui summ `var' if e(sample) == 1, de
+ 20.                         local mean = r(mean)
+ 21.                         outreg2  using $outsheet/app_c4.xls,  label ctitle ("`cond'") title("m
+> ax 3 moves") dec(3) addtex(Mean, `mean') keep(one_move two_move three_move)                      
+>  
+ 22.                         
+. 
+. *** Col. 5 including abroad moves
+.                         areg `var' totmoves_not_w_abroad `demos_`var'' if `cond' == 1  & sample_`
+> var'_all == 1, robust absorb(exper_br_year_sex_fe)
+ 23.                         
+.                         qui summ `var' if e(sample) == 1, de
+ 24.                         local mean = r(mean)
+ 25.                         qui summ totmoves_not_w_abroad if e(sample) == 1, de
+ 26.                         local mean2 = r(mean)
+ 27.                         outreg2  using $outsheet/app_c4.xls,  label ctitle ("`cond'") title("`
+> var'") dec(4) addtex(Mean, `mean') keep(totmoves_not_w_abroad)
+ 28. 
+.                         
+. *** Col 6. any move - international included
+.                         areg `var' any_move_intl `demos_`var'' if `cond' == 1  & sample_`var'_all
+>  == 1, robust absorb(exper_br_year_sex_fe)
+ 29.                         
+.                         qui summ `var' if e(sample) == 1, de
+ 30.                         local mean = r(mean)
+ 31.                         outreg2  using $outsheet/app_c4.xls,  label ctitle ("`cond', abroad in
+> cluded") title("`var'") dec(3) addtex(Mean, `mean') keep(any_move_intl)                          
+>  
+ 32. 
+. *** Col. 7 - including abroad moves with max of 1 move
+.                         areg `var' totmoves_not_w_abroad `demos_`var'' if `cond' == 1  & sample_`
+> var'_all == 1 & zero_one_move == 1, robust absorb(exper_br_year_sex_fe)
+ 33.                         
+.                         qui summ `var' if e(sample) == 1, de
+ 34.                         local mean = r(mean)
+ 35.                         qui summ totmoves_not_w_abroad if e(sample) == 1, de
+ 36.                         local mean2 = r(mean)
+ 37.                         outreg2  using $outsheet/app_c4.xls,  label ctitle ("`cond' max 1 move
+> ") title("`var'") dec(4) addtex(Mean, `mean') keep(totmoves_not_w_abroad)                 
+ 38.                                         
+.                         }
+ 39.         }
+ 40. }
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    144,254
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     12,165
+                                                F(  12, 132077)   =     256.25
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1292
+                                                Adj R-squared     =     0.0489
+                                                Root MSE          =     0.4848
+
+------------------------------------------------------------------------------
+             |               Robust
+    evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+totmoves_not |   .0788909   .0023509    33.56   0.000     .0742831    .0834986
+      female |          0  (omitted)
+         ged |   .0598285   .0047552    12.58   0.000     .0505084    .0691485
+         hsd |   .0305838   .0156728     1.95   0.051    -.0001346    .0613022
+     asc_smc |   .0146766   .0054566     2.69   0.007     .0039817    .0253715
+  college_pl |   -.051759   .0115687    -4.47   0.000    -.0744335   -.0290845
+       afqsc |  -.0015393   .0000875   -17.59   0.000    -.0017109   -.0013677
+       black |  -.0356851   .0039433    -9.05   0.000    -.0434139   -.0279563
+    hispanic |   .0312789   .0045562     6.87   0.000     .0223487     .040209
+  other_race |  -.0546971   .0060157    -9.09   0.000    -.0664879   -.0429064
+  sum_combat |  -.0036843   .0002522   -14.61   0.000    -.0041785     -.00319
+         age |    .101739   .0047121    21.59   0.000     .0925033    .1109748
+      age_sq |  -.0016474   .0000823   -20.02   0.000    -.0018087   -.0014861
+       _cons |  -.8615763   .0664888   -12.96   0.000    -.9918931   -.7312595
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/app_c4.xls
+dir : seeout
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    144,254
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     12,165
+                                                F(  12, 132077)   =     255.53
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1293
+                                                Adj R-squared     =     0.0490
+                                                Root MSE          =     0.4847
+
+------------------------------------------------------------------------------
+             |               Robust
+    evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    any_move |   .0974657   .0029046    33.56   0.000     .0917727    .1031588
+      female |          0  (omitted)
+         ged |   .0593509    .004756    12.48   0.000     .0500291    .0686726
+         hsd |   .0302171   .0156679     1.93   0.054    -.0004917     .060926
+     asc_smc |   .0144491   .0054583     2.65   0.008      .003751    .0251473
+  college_pl |  -.0525789   .0115665    -4.55   0.000     -.075249   -.0299087
+       afqsc |  -.0015258   .0000876   -17.42   0.000    -.0016974   -.0013542
+       black |  -.0358797   .0039435    -9.10   0.000    -.0436089   -.0281505
+    hispanic |   .0313472   .0045553     6.88   0.000     .0224189    .0402754
+  other_race |  -.0547474    .006016    -9.10   0.000    -.0665386   -.0429561
+  sum_combat |  -.0036792    .000252   -14.60   0.000    -.0041731   -.0031853
+         age |    .102046   .0047177    21.63   0.000     .0927994    .1112926
+      age_sq |  -.0016532   .0000824   -20.06   0.000    -.0018147   -.0014917
+       _cons |  -.8708074   .0665672   -13.08   0.000    -1.001278   -.7403369
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/app_c4.xls
+dir : seeout
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    134,996
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     11,829
+                                                F(  12, 123155)   =     225.29
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1314
+                                                Adj R-squared     =     0.0479
+                                                Root MSE          =     0.4856
+
+------------------------------------------------------------------------------
+             |               Robust
+    evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    one_move |   .0931798   .0030013    31.05   0.000     .0872973    .0990622
+      female |          0  (omitted)
+         ged |   .0600355   .0049288    12.18   0.000      .050375    .0696959
+         hsd |   .0353265   .0161806     2.18   0.029     .0036128    .0670403
+     asc_smc |   .0144903   .0056999     2.54   0.011     .0033185    .0256621
+  college_pl |  -.0457571   .0119996    -3.81   0.000    -.0692761    -.022238
+       afqsc |  -.0015264   .0000909   -16.79   0.000    -.0017045   -.0013482
+       black |  -.0346482   .0041052    -8.44   0.000    -.0426943    -.026602
+    hispanic |   .0332667   .0047204     7.05   0.000     .0240149    .0425185
+  other_race |  -.0552488   .0062401    -8.85   0.000    -.0674793   -.0430182
+  sum_combat |  -.0036036   .0002607   -13.82   0.000    -.0041145   -.0030927
+         age |   .1008943    .004867    20.73   0.000     .0913551    .1104336
+      age_sq |   -.001636    .000085   -19.26   0.000    -.0018026   -.0014695
+       _cons |  -.8544039   .0687066   -12.44   0.000    -.9890677   -.7197401
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/app_c4.xls
+dir : seeout
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    144,192
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     12,164
+                                                F(  14, 132014)   =     223.27
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1297
+                                                Adj R-squared     =     0.0494
+                                                Root MSE          =     0.4846
+
+------------------------------------------------------------------------------
+             |               Robust
+    evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    one_move |   .0932945   .0029717    31.39   0.000       .08747     .099119
+    two_move |   .1333307   .0062084    21.48   0.000     .1211625     .145499
+  three_move |   .1567726   .0234371     6.69   0.000     .1108364    .2027088
+      female |          0  (omitted)
+         ged |   .0593728   .0047554    12.49   0.000     .0500523    .0686933
+         hsd |   .0301109   .0156687     1.92   0.055    -.0005994    .0608212
+     asc_smc |   .0145791   .0054574     2.67   0.008     .0038827    .0252754
+  college_pl |  -.0518986   .0115663    -4.49   0.000    -.0745682   -.0292289
+       afqsc |  -.0015217   .0000876   -17.38   0.000    -.0016933     -.00135
+       black |  -.0359445   .0039438    -9.11   0.000    -.0436743   -.0282147
+    hispanic |   .0313154   .0045559     6.87   0.000     .0223859    .0402448
+  other_race |  -.0544986   .0060151    -9.06   0.000    -.0662882   -.0427091
+  sum_combat |  -.0036202   .0002522   -14.35   0.000    -.0041145   -.0031259
+         age |   .1017582   .0047156    21.58   0.000     .0925158    .1110007
+      age_sq |  -.0016481   .0000824   -20.01   0.000    -.0018095   -.0014867
+       _cons |  -.8680438   .0665396   -13.05   0.000    -.9984601   -.7376274
+------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/app_c4.xls
+dir : seeout
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    281,163
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     15,243
+                                                F(  12, 265908)   =     266.96
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0879
+                                                Adj R-squared     =     0.0355
+                                                Root MSE          =     0.4902
+
+---------------------------------------------------------------------------------------
+                      |               Robust
+             evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+totmoves_not_w_abroad |   .0102979   .0013094     7.86   0.000     .0077316    .0128642
+               female |          0  (omitted)
+                  ged |   .0587034    .003588    16.36   0.000     .0516711    .0657357
+                  hsd |   .0402344   .0111115     3.62   0.000     .0184561    .0620127
+              asc_smc |   .0168763    .003876     4.35   0.000     .0092795    .0244732
+           college_pl |   -.057827   .0081063    -7.13   0.000    -.0737151   -.0419389
+                afqsc |  -.0013466   .0000625   -21.54   0.000    -.0014691   -.0012241
+                black |  -.0326223   .0026619   -12.26   0.000    -.0378396    -.027405
+             hispanic |   .0313279   .0033192     9.44   0.000     .0248223    .0378335
+           other_race |   -.045697   .0041578   -10.99   0.000    -.0538461   -.0375479
+           sum_combat |  -.0042532     .00018   -23.63   0.000    -.0046059   -.0039004
+                  age |   .0995664   .0033847    29.42   0.000     .0929324    .1062003
+               age_sq |  -.0016224   .0000591   -27.45   0.000    -.0017382   -.0015066
+                _cons |  -.8289165   .0477713   -17.35   0.000    -.9225469   -.7352862
+---------------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/app_c4.xls
+dir : seeout
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    281,163
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     15,243
+                                                F(  12, 265908)   =     291.22
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0888
+                                                Adj R-squared     =     0.0366
+                                                Root MSE          =     0.4899
+
+-------------------------------------------------------------------------------
+              |               Robust
+     evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+any_move_intl |   .0430804   .0023367    18.44   0.000     .0385005    .0476602
+       female |          0  (omitted)
+          ged |   .0579191   .0035871    16.15   0.000     .0508885    .0649497
+          hsd |   .0392552   .0111026     3.54   0.000     .0174943     .061016
+      asc_smc |   .0168092   .0038739     4.34   0.000     .0092164     .024402
+   college_pl |  -.0565023   .0081011    -6.97   0.000    -.0723803   -.0406242
+        afqsc |  -.0013094   .0000625   -20.95   0.000    -.0014318   -.0011869
+        black |  -.0325704   .0026603   -12.24   0.000    -.0377845   -.0273563
+     hispanic |   .0315034   .0033183     9.49   0.000     .0249997    .0380071
+   other_race |  -.0459371   .0041562   -11.05   0.000    -.0540831   -.0377911
+   sum_combat |  -.0039168   .0001798   -21.79   0.000    -.0042691   -.0035645
+          age |   .0992439   .0033819    29.35   0.000     .0926154    .1058724
+       age_sq |  -.0016174    .000059   -27.39   0.000    -.0017331   -.0015017
+        _cons |  -.8497885   .0477499   -17.80   0.000    -.9433771   -.7561999
+-------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/app_c4.xls
+dir : seeout
+note: female omitted because of collinearity
+
+Linear regression, absorbing indicators         Number of obs     =    206,451
+Absorbed variable: exper_br_year_sex_fe         No. of categories =     13,909
+                                                F(  12, 192530)   =     231.68
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1051
+                                                Adj R-squared     =     0.0404
+                                                Root MSE          =     0.4889
+
+---------------------------------------------------------------------------------------
+                      |               Robust
+             evermarr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------------+----------------------------------------------------------------
+totmoves_not_w_abroad |   .0494714   .0024863    19.90   0.000     .0445982    .0543445
+               female |          0  (omitted)
+                  ged |   .0570904   .0040866    13.97   0.000     .0490808       .0651
+                  hsd |   .0385137   .0126623     3.04   0.002     .0136959    .0633315
+              asc_smc |   .0166567    .004595     3.62   0.000     .0076506    .0256629
+           college_pl |  -.0529741   .0095743    -5.53   0.000    -.0717394   -.0342088
+                afqsc |  -.0013774    .000073   -18.88   0.000    -.0015204   -.0012343
+                black |  -.0309677    .003206    -9.66   0.000    -.0372514   -.0246839
+             hispanic |   .0322169   .0038307     8.41   0.000     .0247088     .039725
+           other_race |   -.046562   .0049267    -9.45   0.000    -.0562182   -.0369057
+           sum_combat |  -.0038589   .0002061   -18.72   0.000    -.0042628    -.003455
+                  age |   .0991439   .0038664    25.64   0.000     .0915658    .1067221
+               age_sq |  -.0016081   .0000674   -23.86   0.000    -.0017402    -.001476
+                _cons |  -.8442681   .0546608   -15.45   0.000    -.9514021   -.7371342
+---------------------------------------------------------------------------------------
+C:\Program Files\Stata16\ado\plus/o/outreg2.ado
+XXX/jhr_output/app_c4.xls
+dir : seeout
+
+. 
+end of do-file
+
