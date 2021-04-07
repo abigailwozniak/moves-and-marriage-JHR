@@ -5,9 +5,9 @@ The tables and figures for “Making Big Decisions: The Impact of Moves on Marri
 
 The do files to create the data for our tables and figures are described below and were created using STATA/MP 16.1.  
 
-Table or Figure / Do File /	Output File
+/***Table or Figure / Do File /	Output File***/
 
-Table 1	/ TK / TK
+Table 1	/ usa_00027.do, acs_moves_marriage.do / acs_moves_marriage.log
 
 Table 2 /	jhr_table_2_table_b1.do /	table_2_table_b1.txt
 
