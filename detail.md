@@ -24,29 +24,29 @@ Table 2 / Appendix Table B1:  Summary Statistics the Five Years of Service Sampl
 - jhr_table_2_table_b1_FINAL.do– Uses jhr_samples_created.dta to produce Table 2 and Table B1. LOG file: table_2_table_b1_FINAL.txt
 
 Table 3 - Tests of Conditional Random Assignment, Dependent Variable: Total Number of Moves
-- jhr_table_3_FINAL.do - Uses jhr_samples_created.dta to produce Table 3. LOG file: log_table_3_FINAL.txt
+- jhr_table_3_FINAL.do - Uses jhr_samples_created.dta to produce Table 3. LOG file: log_table_3_FINAL.txt. EXCEL Output: table_3.xls
 
 Table 4 / Appendix Table C3: The Effect of Moves on Marriage Propensity
-- jhr_table_4_table_c3_FINAL.do – Uses jhr_samples_created.dta to produce Table 4 & Table C3. LOG file: table_4_table_c3_FINAL.txt
+- jhr_table_4_table_c3_FINAL.do – Uses jhr_samples_created.dta to produce Table 4 & Table C3. LOG file: table_4_table_c3_FINAL.txt. EXCEL Output: table_4_panel_a.xls, table_4_panel_b.xls, table_4_panel_c.xls, app_c3_panel_a.xls, app_c3_panel_b.xls, app_c3_panel_c.xls
 
 Table 5.- The Effect of Moves on Other Marriage and Family Outcomes 
--	jhr_table_5_FINAL.do – Uses jhr_samples_created.dta to produce Table 5.  LOG file: table_5_FINAL.txt
+-	jhr_table_5_FINAL.do – Uses jhr_samples_created.dta to produce Table 5.  LOG file: table_5_FINAL.txt. EXCEL Output: table_5_panel_a.xls, table_5_panel_b.xls, table_5_panel_c.xls
 
 Table 6: The Effect of Moves on Other Marriage and Family Outcomes: Alternative Samples
--	jhr_table_6_FINAL.do – Uses jhr_samples_created.dta to produce Columns 1, 2, 4, and 5 of Table 6. LOG file: table_6_FINAL.txt
--	jhr_table_6_column3_final.do - Uses first_term_miles.dta to produce Column 3 of Table 6. LOG file: jhr_end_first_term_FINAL.txt
+-	jhr_table_6_FINAL.do – Uses jhr_samples_created.dta to produce Columns 1, 2, 4, and 5 of Table 6. LOG file: table_6_FINAL.txt. EXCEL Output: table_6_panel_a.xls, table_6_panel_b.xls, table_6_panel_c.xls, table_6_panel_d.xls, table_6_panel_e.xls
+-	jhr_table_6_column3_final.do - Uses first_term_miles.dta to produce Column 3 of Table 6. LOG file: jhr_end_first_term_FINAL.txt. EXCEL Output: table_6_col3.xls
 
 Table 7: Effect of Moves on Marriage Propensity, Adding Controls for Location Characteristics
--	jhr_table_7_FINAL.do – Uses jhr_samples_created.dta to produce Table 7. LOG file: log_table_7_FINAL.txt
+-	jhr_table_7_FINAL.do – Uses jhr_samples_created.dta to produce Table 7. LOG file: log_table_7_FINAL.txt. EXCEL Output: table_7.xls
 
 Table 8: Probability of Married Status in Year t1, t2, t3, t4, and t5 | Not Married when Enter
--	jhr_table_8_FINAL.do uses evermarr_us_sample.dta to produce Table 8. LOG file: jhr_table_8_FINAL.txt
+-	jhr_table_8_FINAL.do uses evermarr_us_sample.dta to produce Table 8. LOG file: jhr_table_8_FINAL.txt. EXCEL Output: table_8.xls
 
 Table C1: Alternative Clustering Methods for Main Table 4 Impacts & Table C2: Table 4 Analysis with Clustering on Job x Rank x Year
--	jhr_app_tables_c1_c2_FINAL.do Uses jhr_samples_created.dta to produce Tables C1 and C2. LOG file: app_tables_c1_c2_FINAL.txt
+-	jhr_app_tables_c1_c2_FINAL.do Uses jhr_samples_created.dta to produce Tables C1 and C2. LOG file: app_tables_c1_c2_FINAL.txt. EXCEL Output: app_c1_evermarr.xls, app_c1_marr_nm_ent.xls, app_c1_married.xls, app_c2_evermarr.xls, app_c2_marr_nm_ent.xls, app_c2_married.xls
 
 Table C4: Non-linear & International Impacts of Moves
--	jhr_app_table_c4_FINAL.do Uses jhr_samples_created.dta to produce Tables C4. LOG file: app_table_c4_FINAL.txt
+-	jhr_app_table_c4_FINAL.do Uses jhr_samples_created.dta to produce Tables C4. LOG file: app_table_c4_FINAL.txt. EXCEL Output: app_c4.xls
 
 **Figures Construction**
 
