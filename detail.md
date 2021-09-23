@@ -1,12 +1,14 @@
 ﻿## Guide to Data Construction and Analysis Files
 
-This document outlines all files in this repository. These contain all files necessary to construct the data and conduct analysis in Carter and Wozniak JHR. U.S. Army personnel data cannot be shared, and some information in the data construction files using this source has been removed to preserve confidentiality. ACS data are readily obtainable from IPUMS-USA, and complete code to reconstruct that portion of the analysis from raw ACS files is included. The remainder of this document outlines files used in data construction and then in analysis reported in Carter and Wozniak JHR.
+This document outlines all files in this repository. These contain all files that were used to construct the data and conduct analysis in Carter and Wozniak JHR (forthcoming). U.S. Army personnel data cannot be shared, and some information in the data construction files using this source has been removed to preserve confidentiality. ACS data are readily obtainable from IPUMS-USA, and complete code to reconstruct that portion of the analysis from raw ACS files is included. The remainder of this document outlines files used in data construction and then in analysis reported in the paper.
+
+All Stata do files and log files (in .txt format) are available in the main directory of this repository. Excel output tables can be found in the Excel-Output folder.
 
 **Data Set Construction**
 
 The tables and figures for “Making Big Decisions: The Impact of Moves on Marriage among U.S. Army Personnel” are created using data from the American Community Survey from 2008-2018 (Table 1) and from individual-level data on military servicemembers (all other Tables and Figures).  The military data is not publicly available outside of researcher with the Army and/or the Office of Economic and Manpower Analysis. 
 
-The do files to create the data for our tables and figures are described below and were created using STATA/MP 16.1.  
+The do files to create the data for the paper's tables and figures are described below and were created using STATA/MP 16.1.  
 
 - Army Personnel Data  
   - jhr_clean_FINAL.do creates the final datasets jhr_clean_for_tables.dta, evermarr_us_sample, figre_sample_fake_1.dta, data_for_graph_miles.dta, figs_3a_3b.dta, and app_fig_1.dta from de-identified data. 
